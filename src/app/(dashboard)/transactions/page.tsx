@@ -23,6 +23,8 @@ import {
   ChevronLeft,
   ChevronRight,
   TrendingUp,
+  FolderPlus,
+  Landmark,
 } from "lucide-react";
 import { TransactionDto } from "@/services/transaction.service";
 import { AccountDto } from "@/services/account.service";
@@ -55,6 +57,18 @@ export default function TransactionsPage() {
   const [isEditOpen, setIsEditOpen] = React.useState(false);
   const [editingTx, setEditingTx] = React.useState<TransactionDto | null>(null);
 
+  // Quick Creator Modals
+  const [isQuickAccountOpen, setIsQuickAccountOpen] = React.useState(false);
+  const [quickAccountName, setQuickAccountName] = React.useState("");
+  const [quickAccountType, setQuickAccountType] = React.useState<string>("bank");
+  const [quickAccountBalance, setQuickAccountBalance] = React.useState("0.00");
+  const [isCreatingAccount, setIsCreatingAccount] = React.useState(false);
+
+  const [isQuickCategoryOpen, setIsQuickCategoryOpen] = React.useState(false);
+  const [quickCategoryName, setQuickCategoryName] = React.useState("");
+  const [quickCategoryColor, setQuickCategoryColor] = React.useState("#6366f1");
+  const [isCreatingCategory, setIsCreatingCategory] = React.useState(false);
+
   // Form state
   const [type, setType] = React.useState<"expense" | "income" | "transfer">("expense");
   const [amount, setAmount] = React.useState("");
@@ -69,27 +83,30 @@ export default function TransactionsPage() {
   const [notes, setNotes] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  // Fetch accounts & categories for form dropdowns
-  React.useEffect(() => {
-    fetch("/api/accounts")
-      .then((r) => r.json())
-      .then((j) => {
-        if (j.data) {
-          setAccounts(j.data);
-          if (j.data.length > 0 && !accountId) {
-            setAccountId(j.data[0].id);
-          }
-        }
-      });
-
-    fetch("/api/categories")
-      .then((r) => r.json())
-      .then((j) => {
-        if (j.data) {
-          setCategories(j.data);
-        }
-      });
+  // Helper to refresh accounts and categories
+  const reloadAccountsAndCategories = React.useCallback(async () => {
+    const [accRes, catRes] = await Promise.all([
+      fetch("/api/accounts"),
+      fetch("/api/categories"),
+    ]);
+    const accJson = await accRes.json();
+    const catJson = await catRes.json();
+    if (accJson.data) setAccounts(accJson.data);
+    if (catJson.data) setCategories(catJson.data);
+    return { accounts: accJson.data || [], categories: catJson.data || [] };
   }, []);
+
+  React.useEffect(() => {
+    reloadAccountsAndCategories().then(({ accounts: accList, categories: catList }) => {
+      if (accList.length > 0 && !accountId) {
+        setAccountId(accList[0].id);
+      }
+      if (catList.length > 0 && !categoryId) {
+        const firstExp = catList.find((c: any) => c.type === "expense");
+        if (firstExp) setCategoryId(firstExp.id);
+      }
+    });
+  }, [reloadAccountsAndCategories]);
 
   const fetchTransactions = React.useCallback(async () => {
     try {
@@ -166,7 +183,7 @@ export default function TransactionsPage() {
       return;
     }
     if (!accountId) {
-      toast.error("Please select a source account");
+      toast.error("Please select a source account or click + New Account");
       return;
     }
     if (type === "transfer" && (!destinationAccountId || destinationAccountId === accountId)) {
@@ -174,7 +191,7 @@ export default function TransactionsPage() {
       return;
     }
     if (type !== "transfer" && !categoryId) {
-      toast.error("Please select a category");
+      toast.error("Please select a category or click + New Category");
       return;
     }
 
@@ -269,6 +286,85 @@ export default function TransactionsPage() {
     }
   };
 
+  // Quick Account Submission
+  const handleQuickCreateAccount = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickAccountName.trim()) {
+      toast.error("Account name is required");
+      return;
+    }
+
+    try {
+      setIsCreatingAccount(true);
+      const res = await fetch("/api/accounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: quickAccountName.trim(),
+          type: quickAccountType,
+          openingBalance: quickAccountBalance || "0.00",
+          currency: "INR",
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        toast.error(json.error?.message || "Failed to create account");
+        return;
+      }
+
+      toast.success(`Account "${quickAccountName}" created!`);
+      const { accounts: updatedAccounts } = await reloadAccountsAndCategories();
+      setAccountId(json.data.id);
+      setIsQuickAccountOpen(false);
+      setQuickAccountName("");
+      setQuickAccountBalance("0.00");
+    } catch {
+      toast.error("Failed to create account.");
+    } finally {
+      setIsCreatingAccount(false);
+    }
+  };
+
+  // Quick Category Submission
+  const handleQuickCreateCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickCategoryName.trim()) {
+      toast.error("Category name is required");
+      return;
+    }
+
+    try {
+      setIsCreatingCategory(true);
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: quickCategoryName.trim(),
+          type: type === "transfer" ? "expense" : type,
+          colorToken: quickCategoryColor,
+          icon: "Tag",
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        toast.error(json.error?.message || "Failed to create category");
+        return;
+      }
+
+      toast.success(`Category "${quickCategoryName}" created!`);
+      await reloadAccountsAndCategories();
+      setCategoryId(json.data.id);
+      setIsQuickCategoryOpen(false);
+      setQuickCategoryName("");
+    } catch {
+      toast.error("Failed to create category.");
+    } finally {
+      setIsCreatingCategory(false);
+    }
+  };
+
   const filteredCategoriesForForm = categories.filter((c) => c.type === type && !c.isArchived);
 
   return (
@@ -320,7 +416,7 @@ export default function TransactionsPage() {
         <Card className="glass-panel">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Net Savings Flow
+              Net Cash Flow
             </CardTitle>
             <TrendingUp className="w-4 h-4 text-indigo-500" />
           </CardHeader>
@@ -338,15 +434,15 @@ export default function TransactionsPage() {
         </Card>
       </div>
 
-      {/* Filter Bar */}
+      {/* Filter & Search Bar */}
       <Card className="p-4 bg-card/60">
-        <div className="flex flex-col lg:flex-row gap-3 items-center justify-between">
-          {/* Search Input */}
-          <div className="relative w-full lg:w-72">
-            <Search className="w-4 h-4 absolute left-3 top-3 text-muted-foreground" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Search merchant, notes..."
-              className="pl-9 h-10"
+              placeholder="Search merchant, description..."
+              className="pl-9 text-xs h-9"
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -355,84 +451,73 @@ export default function TransactionsPage() {
             />
           </div>
 
-          {/* Filters Group */}
-          <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
-            {/* Type selector */}
-            <select
-              className="h-10 rounded-lg border border-input bg-background px-3 text-xs font-medium focus-visible:ring-2 focus-visible:ring-ring"
-              value={typeFilter}
-              onChange={(e) => {
-                setTypeFilter(e.target.value);
-                setPage(1);
-              }}
-            >
-              <option value="">All Types</option>
-              <option value="expense">Expenses</option>
-              <option value="income">Income</option>
-              <option value="transfer">Transfers</option>
-            </select>
+          {/* Type Filter */}
+          <select
+            className="flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring"
+            value={typeFilter}
+            onChange={(e) => {
+              setTypeFilter(e.target.value);
+              setPage(1);
+            }}
+          >
+            <option value="">All Types</option>
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+            <option value="transfer">Transfer</option>
+          </select>
 
-            {/* Account selector */}
-            <select
-              className="h-10 rounded-lg border border-input bg-background px-3 text-xs font-medium focus-visible:ring-2 focus-visible:ring-ring max-w-[150px]"
-              value={accountFilter}
-              onChange={(e) => {
-                setAccountFilter(e.target.value);
-                setPage(1);
-              }}
-            >
-              <option value="">All Accounts</option>
-              {accounts.map((acc) => (
-                <option key={acc.id} value={acc.id}>
-                  {acc.name}
-                </option>
-              ))}
-            </select>
+          {/* Account Filter */}
+          <select
+            className="flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring"
+            value={accountFilter}
+            onChange={(e) => {
+              setAccountFilter(e.target.value);
+              setPage(1);
+            }}
+          >
+            <option value="">All Accounts</option>
+            {accounts.map((acc) => (
+              <option key={acc.id} value={acc.id}>
+                {acc.name}
+              </option>
+            ))}
+          </select>
 
-            {/* Category selector */}
-            <select
-              className="h-10 rounded-lg border border-input bg-background px-3 text-xs font-medium focus-visible:ring-2 focus-visible:ring-ring max-w-[150px]"
-              value={categoryFilter}
-              onChange={(e) => {
-                setCategoryFilter(e.target.value);
-                setPage(1);
-              }}
-            >
-              <option value="">All Categories</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name} ({cat.type})
-                </option>
-              ))}
-            </select>
-
-            {(typeFilter || accountFilter || categoryFilter || searchQuery) && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-xs text-muted-foreground"
-                onClick={() => {
-                  setTypeFilter("");
-                  setAccountFilter("");
-                  setCategoryFilter("");
-                  setSearchQuery("");
-                  setPage(1);
-                }}
-              >
-                Reset
-              </Button>
-            )}
-          </div>
+          {/* Category Filter */}
+          <select
+            className="flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring"
+            value={categoryFilter}
+            onChange={(e) => {
+              setCategoryFilter(e.target.value);
+              setPage(1);
+            }}
+          >
+            <option value="">All Categories</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
         </div>
       </Card>
 
-      {/* Ledger Table & List View */}
+      {/* Transactions Data Table */}
       {isLoading ? (
-        <Card className="p-6 space-y-3">
+        <div className="space-y-3">
           {[1, 2, 3, 4, 5].map((i) => (
-            <Skeleton key={i} className="h-12 w-full" />
+            <Card key={i} className="p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Skeleton className="w-10 h-10 rounded-full" />
+                <div className="space-y-1">
+                  <Skeleton className="w-32 h-4" />
+                  <Skeleton className="w-20 h-3" />
+                </div>
+              </div>
+              <Skeleton className="w-24 h-6" />
+            </Card>
           ))}
-        </Card>
+        </div>
       ) : transactions.length === 0 ? (
         <Card className="p-12 text-center">
           <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
@@ -440,21 +525,23 @@ export default function TransactionsPage() {
           </div>
           <h3 className="text-base font-bold">No transactions found</h3>
           <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1 mb-4">
-            No ledger entries matched your active filters. Add a new income, expense or transfer.
+            {searchQuery || typeFilter || accountFilter || categoryFilter
+              ? "No records match your active search filters. Try clearing some filters."
+              : "Start recording your daily income and expense entries to track your cash flow."}
           </p>
           <Button size="sm" onClick={handleOpenAdd}>
             <Plus className="w-4 h-4 mr-1.5" />
-            Add Transaction
+            Record Transaction
           </Button>
         </Card>
       ) : (
-        <Card className="shadow-sm overflow-hidden">
+        <Card className="shadow-sm overflow-hidden border-border/80">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-muted/40 border-b border-border text-xs uppercase font-semibold text-muted-foreground">
+            <table className="w-full text-xs text-left">
+              <thead className="bg-muted/40 text-muted-foreground uppercase font-semibold text-[10px] tracking-wider border-b border-border">
                 <tr>
                   <th className="py-3 px-4">Date</th>
-                  <th className="py-3 px-4">Type / Details</th>
+                  <th className="py-3 px-4">Entity / Merchant</th>
                   <th className="py-3 px-4">Category</th>
                   <th className="py-3 px-4">Account</th>
                   <th className="py-3 px-4 text-right">Amount</th>
@@ -468,81 +555,57 @@ export default function TransactionsPage() {
                   const isTransfer = tx.type === "transfer";
 
                   return (
-                    <tr key={tx.id} className="hover:bg-muted/30 transition-colors">
-                      <td className="py-3 px-4 text-xs font-medium text-muted-foreground whitespace-nowrap">
-                        {formatDate(tx.occurredAt)}
+                    <tr key={tx.id} className="hover:bg-muted/20 transition-colors">
+                      <td className="py-3.5 px-4 font-medium text-muted-foreground whitespace-nowrap">
+                        {formatDate(tx.occurredAt, "dd MMM yyyy")}
                       </td>
-                      <td className="py-3 px-4">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
-                              isIncome
-                                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                                : isExpense
-                                ? "bg-rose-500/10 text-rose-600 dark:text-rose-400"
-                                : "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
-                            }`}
-                          >
-                            {isIncome ? (
-                              <ArrowUpRight className="w-4 h-4" />
-                            ) : isExpense ? (
-                              <ArrowDownRight className="w-4 h-4" />
-                            ) : (
-                              <Repeat className="w-4 h-4" />
-                            )}
-                          </div>
-                          <div>
-                            <p className="font-semibold text-sm leading-tight">
-                              {tx.merchant || tx.description || (isTransfer ? "Transfer" : "Transaction")}
-                            </p>
-                            {tx.notes && (
-                              <p className="text-[11px] text-muted-foreground line-clamp-1 mt-0.5">
-                                {tx.notes}
-                              </p>
-                            )}
-                          </div>
+                      <td className="py-3.5 px-4">
+                        <div className="font-semibold text-foreground">
+                          {tx.merchant || (isTransfer ? "Account Transfer" : "Transaction")}
                         </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        {isTransfer ? (
-                          <Badge variant="secondary" className="text-[11px]">
-                            Internal Transfer
-                          </Badge>
-                        ) : tx.categoryName ? (
-                          <Badge variant="outline" className="text-[11px] gap-1 font-medium">
-                            {tx.categoryName}
-                          </Badge>
-                        ) : (
-                          <span className="text-xs text-muted-foreground">—</span>
+                        {tx.description && (
+                          <div className="text-[11px] text-muted-foreground truncate max-w-xs">
+                            {tx.description}
+                          </div>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-xs font-medium">
+                      <td className="py-3.5 px-4">
                         {isTransfer ? (
-                          <span className="text-muted-foreground">
-                            {tx.accountName} $\to$ {tx.destinationAccountName}
+                          <Badge variant="secondary" className="gap-1 font-mono text-[10px]">
+                            <Repeat className="w-3 h-3 text-primary" />
+                            Transfer
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="font-medium text-[10px]">
+                            {tx.categoryName || "Uncategorized"}
+                          </Badge>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <span className="font-medium">{tx.accountName || "Account"}</span>
+                        {isTransfer && tx.destinationAccountName && (
+                          <span className="text-muted-foreground ml-1">
+                            → {tx.destinationAccountName}
                           </span>
-                        ) : (
-                          <span className="text-foreground">{tx.accountName}</span>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono font-bold text-sm whitespace-nowrap">
+                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
                         <span
-                          className={
+                          className={`font-mono font-bold text-sm ${
                             isIncome
                               ? "text-emerald-600 dark:text-emerald-400"
                               : isExpense
                               ? "text-rose-600 dark:text-rose-400"
                               : "text-foreground"
-                          }
+                          }`}
                         >
-                          {isExpense
-                            ? `−${formatMinorUnits(tx.amountMinor, { currency: tx.currency })}`
-                            : isIncome
-                            ? `+${formatMinorUnits(tx.amountMinor, { currency: tx.currency })}`
-                            : formatMinorUnits(tx.amountMinor, { currency: tx.currency })}
+                          {formatMinorUnits(
+                            isExpense ? -tx.amountMinor : tx.amountMinor,
+                            { currency: tx.currency, showSign: isIncome }
+                          )}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-right whitespace-nowrap">
+                      <td className="py-3.5 px-4 text-right">
                         <div className="flex items-center justify-end gap-1">
                           <Button
                             variant="ghost"
@@ -682,9 +745,200 @@ export default function TransactionsPage() {
           {/* Source Account & Category / Destination Account */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-muted-foreground">
+                  {type === "transfer" ? "Source Account" : "Account"}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setIsQuickAccountOpen(true)}
+                  className="text-[11px] text-primary hover:underline font-semibold flex items-center gap-0.5"
+                >
+                  <Plus className="w-3 h-3" /> Add Account
+                </button>
+              </div>
+              <select
+                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
+                value={accountId}
+                onChange={(e) => {
+                  if (e.target.value === "__NEW_ACCOUNT__") {
+                    setIsQuickAccountOpen(true);
+                  } else {
+                    setAccountId(e.target.value);
+                  }
+                }}
+                required
+              >
+                {accounts.filter((a) => !a.isArchived).length === 0 && (
+                  <option value="">No accounts found — click + Add</option>
+                )}
+                {accounts.filter((a) => !a.isArchived).map((acc) => (
+                  <option key={acc.id} value={acc.id}>
+                    {acc.name}
+                  </option>
+                ))}
+                <option value="__NEW_ACCOUNT__">+ Create New Account...</option>
+              </select>
+            </div>
+
+            {type === "transfer" ? (
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-muted-foreground">Destination Account</label>
+                  <button
+                    type="button"
+                    onClick={() => setIsQuickAccountOpen(true)}
+                    className="text-[11px] text-primary hover:underline font-semibold flex items-center gap-0.5"
+                  >
+                    <Plus className="w-3 h-3" /> Add Account
+                  </button>
+                </div>
+                <select
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
+                  value={destinationAccountId}
+                  onChange={(e) => {
+                    if (e.target.value === "__NEW_ACCOUNT__") {
+                      setIsQuickAccountOpen(true);
+                    } else {
+                      setDestinationAccountId(e.target.value);
+                    }
+                  }}
+                  required
+                >
+                  <option value="">Select Destination</option>
+                  {accounts
+                    .filter((a) => !a.isArchived && a.id !== accountId)
+                    .map((acc) => (
+                      <option key={acc.id} value={acc.id}>
+                        {acc.name}
+                      </option>
+                    ))}
+                  <option value="__NEW_ACCOUNT__">+ Create New Account...</option>
+                </select>
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-muted-foreground">Category</label>
+                  <button
+                    type="button"
+                    onClick={() => setIsQuickCategoryOpen(true)}
+                    className="text-[11px] text-primary hover:underline font-semibold flex items-center gap-0.5"
+                  >
+                    <Plus className="w-3 h-3" /> Add Category
+                  </button>
+                </div>
+                <select
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
+                  value={categoryId}
+                  onChange={(e) => {
+                    if (e.target.value === "__NEW_CATEGORY__") {
+                      setIsQuickCategoryOpen(true);
+                    } else {
+                      setCategoryId(e.target.value);
+                    }
+                  }}
+                  required
+                >
+                  <option value="">Select Category</option>
+                  {filteredCategoriesForForm.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                  <option value="__NEW_CATEGORY__">+ Create New Category...</option>
+                </select>
+              </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-muted-foreground">Date</label>
+              <Input
+                type="date"
+                value={occurredAt}
+                onChange={(e) => setOccurredAt(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
               <label className="text-xs font-semibold text-muted-foreground">
-                {type === "transfer" ? "Source Account" : "Account"}
+                {type === "income" ? "Payer / Source" : "Merchant / Entity"}
               </label>
+              <Input
+                placeholder="e.g. Swiggy, Amazon, Employer"
+                value={merchant}
+                onChange={(e) => setMerchant(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">Description (Optional)</label>
+            <Input
+              placeholder="e.g. Monthly grocery stock up"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">Notes (Optional)</label>
+            <Input
+              placeholder="Add optional context or reference"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 pt-3 border-t border-border">
+            <Button type="button" variant="outline" onClick={() => setIsAddOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" isLoading={isSubmitting}>
+              Save Transaction
+            </Button>
+          </div>
+        </form>
+      </Dialog>
+
+      {/* Edit Transaction Dialog */}
+      <Dialog
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+        title="Edit Transaction"
+        description="Update transaction details in your ledger."
+      >
+        <form onSubmit={handleUpdateTransaction} className="space-y-4">
+          {/* Amount Input */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">Amount (₹)</label>
+            <Input
+              type="number"
+              step="0.01"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Source Account & Category / Destination Account */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-muted-foreground">
+                  {type === "transfer" ? "Source Account" : "Account"}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setIsQuickAccountOpen(true)}
+                  className="text-[11px] text-primary hover:underline font-semibold"
+                >
+                  + Add
+                </button>
+              </div>
               <select
                 className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
                 value={accountId}
@@ -720,7 +974,16 @@ export default function TransactionsPage() {
               </div>
             ) : (
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground">Category</label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-muted-foreground">Category</label>
+                  <button
+                    type="button"
+                    onClick={() => setIsQuickCategoryOpen(true)}
+                    className="text-[11px] text-primary hover:underline font-semibold"
+                  >
+                    + Add
+                  </button>
+                </div>
                 <select
                   className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
                   value={categoryId}
@@ -748,12 +1011,12 @@ export default function TransactionsPage() {
                 required
               />
             </div>
+
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-muted-foreground">
-                {type === "income" ? "Payer / Source" : "Merchant / Store"}
+                {type === "income" ? "Payer / Source" : "Merchant / Entity"}
               </label>
               <Input
-                placeholder="e.g. Swiggy, Amazon, Employer"
                 value={merchant}
                 onChange={(e) => setMerchant(e.target.value)}
               />
@@ -761,116 +1024,11 @@ export default function TransactionsPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground">Notes (Optional)</label>
+            <label className="text-xs font-semibold text-muted-foreground">Description</label>
             <Input
-              placeholder="Add optional context or reference"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
-          </div>
-
-          <div className="flex justify-end gap-2 pt-3 border-t border-border">
-            <Button type="button" variant="outline" onClick={() => setIsAddOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" isLoading={isSubmitting}>
-              Save Transaction
-            </Button>
-          </div>
-        </form>
-      </Dialog>
-
-      {/* Edit Transaction Dialog */}
-      <Dialog
-        isOpen={isEditOpen}
-        onClose={() => setIsEditOpen(false)}
-        title="Edit Transaction"
-        description="Update transaction details in ledger."
-      >
-        <form onSubmit={handleUpdateTransaction} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground">Amount (₹)</label>
-            <Input
-              type="number"
-              step="0.01"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-muted-foreground">Account</label>
-              <select
-                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
-                value={accountId}
-                onChange={(e) => setAccountId(e.target.value)}
-                required
-              >
-                {accounts.map((acc) => (
-                  <option key={acc.id} value={acc.id}>
-                    {acc.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {type === "transfer" ? (
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground">Destination Account</label>
-                <select
-                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
-                  value={destinationAccountId}
-                  onChange={(e) => setDestinationAccountId(e.target.value)}
-                  required
-                >
-                  <option value="">Select Destination</option>
-                  {accounts
-                    .filter((a) => a.id !== accountId)
-                    .map((acc) => (
-                      <option key={acc.id} value={acc.id}>
-                        {acc.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            ) : (
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground">Category</label>
-                <select
-                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
-                  value={categoryId}
-                  onChange={(e) => setCategoryId(e.target.value)}
-                  required
-                >
-                  {filteredCategoriesForForm.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-muted-foreground">Date</label>
-              <Input
-                type="date"
-                value={occurredAt}
-                onChange={(e) => setOccurredAt(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-muted-foreground">Merchant / Entity</label>
-              <Input
-                value={merchant}
-                onChange={(e) => setMerchant(e.target.value)}
-              />
-            </div>
           </div>
 
           <div className="space-y-1.5">
@@ -887,6 +1045,110 @@ export default function TransactionsPage() {
             </Button>
             <Button type="submit" isLoading={isSubmitting}>
               Save Changes
+            </Button>
+          </div>
+        </form>
+      </Dialog>
+
+      {/* Quick Add Account Sub-Dialog */}
+      <Dialog
+        isOpen={isQuickAccountOpen}
+        onClose={() => setIsQuickAccountOpen(false)}
+        title="Quick Add Account"
+        description="Create a new bank, wallet or cash account without leaving this form."
+      >
+        <form onSubmit={handleQuickCreateAccount} className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">Account Name</label>
+            <Input
+              placeholder="e.g. HDFC Salary Bank, Cash Pocket"
+              value={quickAccountName}
+              onChange={(e) => setQuickAccountName(e.target.value)}
+              required
+              autoFocus
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-muted-foreground">Type</label>
+              <select
+                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
+                value={quickAccountType}
+                onChange={(e) => setQuickAccountType(e.target.value)}
+              >
+                <option value="bank">Bank Checking</option>
+                <option value="savings">Savings Account</option>
+                <option value="cash">Cash Wallet</option>
+                <option value="credit_card">Credit Card</option>
+                <option value="wallet">Digital Wallet</option>
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-muted-foreground">Opening Balance (₹)</label>
+              <Input
+                type="number"
+                step="0.01"
+                value={quickAccountBalance}
+                onChange={(e) => setQuickAccountBalance(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-3 border-t border-border">
+            <Button type="button" variant="outline" onClick={() => setIsQuickAccountOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" isLoading={isCreatingAccount}>
+              Add &amp; Select Account
+            </Button>
+          </div>
+        </form>
+      </Dialog>
+
+      {/* Quick Add Category Sub-Dialog */}
+      <Dialog
+        isOpen={isQuickCategoryOpen}
+        onClose={() => setIsQuickCategoryOpen(false)}
+        title={`Quick Add ${type === "income" ? "Income" : "Expense"} Category`}
+        description="Create a new category tag and select it immediately."
+      >
+        <form onSubmit={handleQuickCreateCategory} className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">Category Name</label>
+            <Input
+              placeholder="e.g. Groceries, Freelance, Subscriptions"
+              value={quickCategoryName}
+              onChange={(e) => setQuickCategoryName(e.target.value)}
+              required
+              autoFocus
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-muted-foreground">Color Theme</label>
+            <div className="flex items-center gap-2">
+              {["#6366f1", "#10b981", "#f43f5e", "#f59e0b", "#06b6d4", "#8b5cf6", "#ec4899"].map((hex) => (
+                <button
+                  key={hex}
+                  type="button"
+                  onClick={() => setQuickCategoryColor(hex)}
+                  className={`w-7 h-7 rounded-full transition-transform ${
+                    quickCategoryColor === hex ? "scale-125 ring-2 ring-foreground" : "hover:scale-110"
+                  }`}
+                  style={{ backgroundColor: hex }}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-3 border-t border-border">
+            <Button type="button" variant="outline" onClick={() => setIsQuickCategoryOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" isLoading={isCreatingCategory}>
+              Add &amp; Select Category
             </Button>
           </div>
         </form>
