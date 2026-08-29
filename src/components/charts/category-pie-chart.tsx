@@ -10,24 +10,16 @@ import {
 } from "recharts";
 import { formatMinorUnits } from "@/lib/money/money";
 import { CategorySpendingPoint } from "@/repositories/analytics.repository";
+import { useTheme } from "@/components/theme/theme-provider";
 
 interface CategoryPieChartProps {
   data: CategorySpendingPoint[];
   currency?: string;
 }
 
-const FINTECH_PALETTE = [
-  "#651F24", // Deep Maroon
-  "#C49A45", // Antique Gold
-  "#A64B2A", // Rust
-  "#6B4636", // Warm Brown
-  "#7A292E", // Burgundy
-  "#B86632", // Burnt Orange
-  "#D6B66A", // Soft Gold
-  "#3A2923", // Dark Brown
-];
-
 export function CategoryPieChart({ data, currency = "INR" }: CategoryPieChartProps) {
+  const { themeConfig } = useTheme();
+
   if (!data || data.length === 0) {
     return (
       <div className="h-[260px] flex flex-col items-center justify-center text-center p-4">
@@ -39,10 +31,12 @@ export function CategoryPieChart({ data, currency = "INR" }: CategoryPieChartPro
     );
   }
 
+  const themePalette = themeConfig.preview.chart;
+
   const chartData = data.map((d, index) => ({
     name: d.categoryName,
     value: d.amountMinor,
-    color: d.colorToken || FINTECH_PALETTE[index % FINTECH_PALETTE.length],
+    color: d.colorToken || themePalette[index % themePalette.length],
     percentage: d.percentage,
     count: d.count,
   }));
@@ -82,7 +76,7 @@ export function CategoryPieChart({ data, currency = "INR" }: CategoryPieChartPro
                         <span className="font-mono font-bold text-foreground">
                           {formatMinorUnits(item.value, { currency })}
                         </span>
-                        <span className="font-semibold text-amber-700 dark:text-amber-300">{item.percentage}%</span>
+                        <span className="font-semibold text-accent">{item.percentage}%</span>
                       </div>
                     </div>
                   );

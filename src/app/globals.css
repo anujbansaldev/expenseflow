@@ -3,80 +3,491 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 43 37% 95%; /* Warm Ivory #F8F5EF */
-    --foreground: 26 9% 15%; /* Charcoal #292522 */
+  /* ==========================================================================
+     THEME 01: HERITAGE (Default)
+     Private Banking, Wealth Management & Financial Journals
+     ========================================================================== */
+  :root,
+  [data-theme="heritage"] {
+    --background: 43 37% 95%; /* #F8F5EF */
+    --background-secondary: 39 33% 91%; /* #F1E9DC */
+    --surface: 38 100% 98.5%; /* #FFFCF7 */
+    --surface-elevated: 0 0% 100%; /* #FFFFFF */
+    --surface-muted: 40 25% 93%; /* #F2ECE1 */
 
-    --card: 38 100% 98.5%; /* Warm White #FFFCF7 */
-    --card-foreground: 26 9% 15%; /* Charcoal #292522 */
+    --card: 38 100% 98.5%;
+    --card-foreground: 26 9% 15%;
 
     --popover: 38 100% 98.5%;
     --popover-foreground: 26 9% 15%;
 
+    --foreground: 26 9% 15%; /* #292522 */
+    --foreground-secondary: 27 9% 30%; /* #524A45 */
+    --foreground-muted: 27 9% 43%; /* #756B63 */
+
     --primary: 356 53% 26%; /* Deep Maroon #651F24 */
+    --primary-hover: 356 50% 21%; /* #53181C */
     --primary-foreground: 38 100% 98.5%;
 
     --secondary: 39 33% 93%; /* Cream #F3EEE5 */
     --secondary-foreground: 16 25% 18%; /* Dark Brown #3A2923 */
 
-    --muted: 38 27% 90%;
-    --muted-foreground: 27 9% 43%; /* Muted Brown Gray #756B63 */
+    --accent: 40 53% 52%; /* Antique Gold #C49A45 */
+    --accent-soft: 40 53% 94%;
+    --accent-foreground: 16 25% 18%;
 
-    --accent: 39 33% 93%;
-    --accent-foreground: 356 53% 26%;
+    --muted: 38 27% 90%;
+    --muted-foreground: 27 9% 43%;
 
     --destructive: 16 60% 41%; /* Rust #A64B2A */
     --destructive-foreground: 38 100% 98.5%;
 
-    --success: 140 33% 26%; /* Muted Deep Green #2D5A3C */
+    --success: 140 33% 26%; /* Muted Forest Green #2D5A3C */
     --success-foreground: 38 100% 98.5%;
 
     --warning: 40 53% 52%; /* Antique Gold #C49A45 */
     --warning-foreground: 16 25% 18%;
 
-    --border: 36 24% 83%; /* Soft Warm Border #DED5C9 */
-    --input: 36 24% 83%;
-    --ring: 40 53% 52%; /* Antique Gold #C49A45 */
+    --info: 210 25% 35%;
+    --info-foreground: 38 100% 98.5%;
 
-    --radius: 0.5rem; /* 8px */
+    --border: 36 24% 83%; /* #DED5C9 */
+    --border-strong: 36 24% 70%;
+    --divider: 36 24% 88%;
+
+    --input: 36 24% 83%;
+    --input-background: 0 0% 100%;
+    --input-border: 36 24% 83%;
+
+    --ring: 40 53% 52%;
+
+    --sidebar-background: 43 37% 95%;
+    --sidebar-foreground: 26 9% 15%;
+    --sidebar-active: 356 53% 26%;
+    --header-background: 43 37% 95%;
+
+    /* Chart Color Tokens */
+    --chart-1: #651f24; /* Deep Maroon */
+    --chart-2: #c49a45; /* Antique Gold */
+    --chart-3: #2d5a3c; /* Forest Green */
+    --chart-4: #6b4636; /* Warm Brown */
+    --chart-5: #7a292e; /* Burgundy */
+
+    --shadow-sm: 0 1px 2px 0 rgba(41, 37, 34, 0.04);
+    --shadow-md: 0 4px 6px -1px rgba(41, 37, 34, 0.06), 0 2px 4px -1px rgba(41, 37, 34, 0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(41, 37, 34, 0.08);
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius: 0.5rem;
+
+    --font-heading: var(--font-newsreader), Georgia, serif;
   }
 
-  .dark {
-    --background: 24 10% 10%; /* Dark Espresso Charcoal #1C1917 */
-    --foreground: 43 37% 95%; /* Warm Ivory #F8F5EF */
+  /* ==========================================================================
+     THEME 02: RUST & LEDGER
+     Paper Ledgers, Accounting Books & Editorial Financial Statements
+     ========================================================================== */
+  [data-theme="rust-ledger"] {
+    --background: 40 40% 96%; /* Paper #FAF7F1 */
+    --background-secondary: 35 34% 87%; /* Warm Beige #E9DED0 */
+    --surface: 0 0% 100%;
+    --surface-elevated: 0 0% 100%;
+    --surface-muted: 36 30% 92%;
 
-    --card: 13 14% 13%; /* Dark Warm Brown Charcoal #251E1C */
-    --card-foreground: 43 37% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 24 8% 13%; /* Charcoal #24211F */
 
-    --popover: 13 14% 13%;
-    --popover-foreground: 43 37% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 24 8% 13%;
 
-    --primary: 356 53% 36%; /* Burgundy / Maroon #85292F */
-    --primary-foreground: 38 100% 98.5%;
+    --foreground: 24 8% 13%; /* #24211F */
+    --foreground-secondary: 24 15% 25%;
+    --foreground-muted: 24 10% 45%;
 
-    --secondary: 20 12% 15%; /* Dark Charcoal Surface #2C2522 */
-    --secondary-foreground: 42 57% 63%; /* Soft Gold #D6B66A */
+    --primary: 16 60% 41%; /* Rust #A64B2A */
+    --primary-hover: 16 60% 34%;
+    --primary-foreground: 40 40% 98%;
 
-    --muted: 18 13% 16%;
-    --muted-foreground: 26 10% 58%; /* Soft Muted Gray #9E9289 */
+    --secondary: 35 34% 90%;
+    --secondary-foreground: 16 25% 18%; /* Dark Brown #3A2923 */
 
-    --accent: 20 12% 15%;
-    --accent-foreground: 42 57% 63%;
+    --accent: 37 53% 55%; /* Gold #C89B52 */
+    --accent-soft: 37 53% 92%;
+    --accent-foreground: 16 25% 18%;
 
-    --destructive: 16 57% 46%; /* Rust #B85532 */
-    --destructive-foreground: 38 100% 98.5%;
+    --muted: 35 25% 90%;
+    --muted-foreground: 24 10% 45%;
 
-    --success: 140 33% 36%; /* Forest Green #3E7B52 */
-    --success-foreground: 38 100% 98.5%;
+    --destructive: 16 60% 41%; /* Rust */
+    --destructive-foreground: 40 40% 98%;
 
-    --warning: 42 57% 63%; /* Soft Gold #D6B66A */
-    --warning-foreground: 24 10% 10%;
+    --success: 142 32% 28%; /* Forest Green */
+    --success-foreground: 40 40% 98%;
 
-    --border: 24 14% 21%; /* Dark Border #3D332D */
-    --input: 24 14% 21%;
-    --ring: 42 57% 63%;
+    --warning: 24 57% 46%; /* Burnt Orange #B86632 */
+    --warning-foreground: 40 40% 98%;
 
-    --radius: 0.5rem; /* 8px */
+    --info: 210 20% 40%;
+    --info-foreground: 40 40% 98%;
+
+    --border: 35 26% 84%; /* #E2D8CA */
+    --border-strong: 35 26% 70%;
+    --divider: 35 26% 88%;
+
+    --input: 35 26% 84%;
+    --input-background: 0 0% 100%;
+    --input-border: 35 26% 84%;
+
+    --ring: 16 60% 41%;
+
+    --sidebar-background: 40 40% 96%;
+    --sidebar-foreground: 24 8% 13%;
+    --sidebar-active: 16 60% 41%;
+    --header-background: 40 40% 96%;
+
+    /* Chart Color Tokens */
+    --chart-1: #a64b2a; /* Rust */
+    --chart-2: #b86632; /* Burnt Orange */
+    --chart-3: #c89b52; /* Gold */
+    --chart-4: #3a2923; /* Dark Brown */
+    --chart-5: #756559; /* Warm Slate */
+
+    --shadow-sm: 0 1px 2px 0 rgba(36, 33, 31, 0.03);
+    --shadow-md: 0 4px 6px -1px rgba(36, 33, 31, 0.05);
+    --shadow-lg: 0 10px 15px -3px rgba(36, 33, 31, 0.07);
+
+    --radius-sm: 0.125rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius: 0.375rem;
+
+    --font-heading: var(--font-newsreader), Georgia, serif;
+  }
+
+  /* ==========================================================================
+     THEME 03: MIDNIGHT LEDGER
+     Dark Financial Terminal & Institutional Wealth Management
+     ========================================================================== */
+  [data-theme="midnight-ledger"] {
+    --background: 24 12% 8%; /* Deep Charcoal #171513 */
+    --background-secondary: 24 10% 12%; /* #211E1B */
+    --surface: 24 10% 12%; /* #211E1B */
+    --surface-elevated: 24 10% 15%; /* #292521 */
+    --surface-muted: 24 10% 10%;
+
+    --card: 24 10% 12%;
+    --card-foreground: 38 33% 93%; /* #F3EEE5 */
+
+    --popover: 24 10% 14%;
+    --popover-foreground: 38 33% 93%;
+
+    --foreground: 38 33% 93%; /* #F3EEE5 */
+    --foreground-secondary: 35 15% 75%;
+    --foreground-muted: 30 10% 63%; /* #AAA097 */
+
+    --primary: 356 49% 37%; /* Burgundy #8B3035 */
+    --primary-hover: 356 49% 45%;
+    --primary-foreground: 38 33% 96%;
+
+    --secondary: 24 10% 16%;
+    --secondary-foreground: 40 48% 57%; /* Gold #C6A15B */
+
+    --accent: 40 48% 57%; /* Gold #C6A15B */
+    --accent-soft: 40 30% 18%;
+    --accent-foreground: 40 48% 65%;
+
+    --muted: 24 10% 16%;
+    --muted-foreground: 30 10% 63%;
+
+    --destructive: 18 54% 43%; /* Rust #A85532 */
+    --destructive-foreground: 38 33% 96%;
+
+    --success: 140 31% 35%; /* Muted Emerald #3C734E */
+    --success-foreground: 38 33% 96%;
+
+    --warning: 40 48% 57%; /* Gold */
+    --warning-foreground: 24 12% 8%;
+
+    --info: 210 30% 45%;
+    --info-foreground: 38 33% 96%;
+
+    --border: 24 12% 21%; /* #3B342E */
+    --border-strong: 24 12% 32%;
+    --divider: 24 12% 17%;
+
+    --input: 24 12% 21%;
+    --input-background: 24 10% 10%;
+    --input-border: 24 12% 21%;
+
+    --ring: 40 48% 57%;
+
+    --sidebar-background: 24 12% 8%;
+    --sidebar-foreground: 38 33% 93%;
+    --sidebar-active: 356 49% 37%;
+    --header-background: 24 12% 8%;
+
+    /* Chart Color Tokens */
+    --chart-1: #8b3035; /* Primary Burgundy */
+    --chart-2: #c6a15b; /* Soft Gold */
+    --chart-3: #3c734e; /* Muted Green */
+    --chart-4: #a85532; /* Deep Rust */
+    --chart-5: #8e7d70; /* Muted Slate */
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.55);
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius: 0.5rem;
+
+    --font-heading: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  /* ==========================================================================
+     THEME 04: OLIVE WEALTH
+     Calm, Mature & Sustainable Wealth Management
+     ========================================================================== */
+  [data-theme="olive-wealth"] {
+    --background: 45 33% 94%; /* Cream #F6F3EA */
+    --background-secondary: 45 20% 89%;
+    --surface: 0 0% 100%;
+    --surface-elevated: 0 0% 100%;
+    --surface-muted: 45 22% 91%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 70 6% 16%; /* Charcoal #292A25 */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 70 6% 16%;
+
+    --foreground: 70 6% 16%; /* #292A25 */
+    --foreground-secondary: 70 8% 30%;
+    --foreground-muted: 68 5% 44%; /* #74766B */
+
+    --primary: 88 17% 27%; /* Deep Olive #46513A */
+    --primary-hover: 88 17% 21%;
+    --primary-foreground: 45 33% 98%;
+
+    --secondary: 45 20% 90%;
+    --secondary-foreground: 24 26% 35%; /* Warm Brown #705342 */
+
+    --accent: 41 40% 53%; /* Gold #B89A58 */
+    --accent-soft: 41 40% 92%;
+    --accent-foreground: 88 17% 27%;
+
+    --muted: 45 15% 89%;
+    --muted-foreground: 68 5% 44%;
+
+    --destructive: 14 45% 38%;
+    --destructive-foreground: 45 33% 98%;
+
+    --success: 88 20% 35%;
+    --success-foreground: 45 33% 98%;
+
+    --warning: 41 40% 53%;
+    --warning-foreground: 70 6% 16%;
+
+    --info: 200 20% 40%;
+    --info-foreground: 45 33% 98%;
+
+    --border: 45 16% 81%; /* #D8D4C7 */
+    --border-strong: 45 16% 68%;
+    --divider: 45 16% 86%;
+
+    --input: 45 16% 81%;
+    --input-background: 0 0% 100%;
+    --input-border: 45 16% 81%;
+
+    --ring: 88 17% 27%;
+
+    --sidebar-background: 45 33% 94%;
+    --sidebar-foreground: 70 6% 16%;
+    --sidebar-active: 88 17% 27%;
+    --header-background: 45 33% 94%;
+
+    /* Chart Color Tokens */
+    --chart-1: #46513a; /* Deep Olive */
+    --chart-2: #667052; /* Olive Leaf */
+    --chart-3: #b89a58; /* Warm Gold */
+    --chart-4: #705342; /* Earth Brown */
+    --chart-5: #8b8d7f; /* Soft Moss Gray */
+
+    --shadow-sm: 0 1px 2px 0 rgba(41, 42, 37, 0.04);
+    --shadow-md: 0 4px 6px -1px rgba(41, 42, 37, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(41, 42, 37, 0.08);
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius: 0.5rem;
+
+    --font-heading: var(--font-newsreader), Georgia, serif;
+  }
+
+  /* ==========================================================================
+     THEME 05: TERRACOTTA
+     Warm, Contemporary & Approachable Lifestyle Finance
+     ========================================================================== */
+  [data-theme="terracotta"] {
+    --background: 34 67% 96%; /* Warm Cream #FBF5ED */
+    --background-secondary: 32 45% 85%; /* Sand #E9D9C7 */
+    --surface: 0 0% 100%;
+    --surface-elevated: 0 0% 100%;
+    --surface-muted: 32 35% 92%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 15 14% 17%; /* Dark Charcoal #302724 */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 15 14% 17%;
+
+    --foreground: 15 14% 17%; /* #302724 */
+    --foreground-secondary: 15 18% 30%;
+    --foreground-muted: 15 10% 48%;
+
+    --primary: 11 47% 45%; /* Terracotta #A94F3C */
+    --primary-hover: 11 47% 38%;
+    --primary-foreground: 34 67% 98%;
+
+    --secondary: 32 45% 90%;
+    --secondary-foreground: 11 26% 21%; /* Deep Brown #432C27 */
+
+    --accent: 38 45% 55%; /* Gold #C19A5A */
+    --accent-soft: 38 45% 92%;
+    --accent-foreground: 11 26% 21%;
+
+    --muted: 32 30% 90%;
+    --muted-foreground: 15 10% 48%;
+
+    --destructive: 11 47% 45%; /* Terracotta */
+    --destructive-foreground: 34 67% 98%;
+
+    --success: 144 28% 32%;
+    --success-foreground: 34 67% 98%;
+
+    --warning: 19 50% 48%; /* Rust #B9653E */
+    --warning-foreground: 34 67% 98%;
+
+    --info: 210 25% 42%;
+    --info-foreground: 34 67% 98%;
+
+    --border: 32 36% 84%; /* #E5D7C7 */
+    --border-strong: 32 36% 70%;
+    --divider: 32 36% 88%;
+
+    --input: 32 36% 84%;
+    --input-background: 0 0% 100%;
+    --input-border: 32 36% 84%;
+
+    --ring: 11 47% 45%;
+
+    --sidebar-background: 34 67% 96%;
+    --sidebar-foreground: 15 14% 17%;
+    --sidebar-active: 11 47% 45%;
+    --header-background: 34 67% 96%;
+
+    /* Chart Color Tokens */
+    --chart-1: #a94f3c; /* Terracotta */
+    --chart-2: #b9653e; /* Rust */
+    --chart-3: #c19a5a; /* Warm Gold */
+    --chart-4: #432c27; /* Deep Brown */
+    --chart-5: #8d736a; /* Muted Clay */
+
+    --shadow-sm: 0 1px 2px 0 rgba(48, 39, 36, 0.04);
+    --shadow-md: 0 4px 6px -1px rgba(48, 39, 36, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(48, 39, 36, 0.08);
+
+    --radius-sm: 0.375rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 0.875rem;
+    --radius: 0.625rem;
+
+    --font-heading: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  /* ==========================================================================
+     THEME 06: CLASSIC PAPER
+     Minimal, Timeless & Financial Broadsheet Editorial
+     ========================================================================== */
+  [data-theme="classic-paper"] {
+    --background: 43 45% 97%; /* Pure Fine Paper #FCFAF5 */
+    --background-secondary: 38 25% 91%;
+    --surface: 0 0% 100%;
+    --surface-elevated: 0 0% 100%;
+    --surface-muted: 40 20% 93%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 30 7% 12%; /* Ink #201E1B */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 7% 12%;
+
+    --foreground: 30 7% 12%; /* #201E1B */
+    --foreground-secondary: 25 15% 29%; /* #55483F */
+    --foreground-muted: 29 7% 51%; /* Gray #8B837B */
+
+    --primary: 355 41% 32%; /* Editorial Burgundy #722F35 */
+    --primary-hover: 355 41% 25%;
+    --primary-foreground: 43 45% 98%;
+
+    --secondary: 40 20% 92%;
+    --secondary-foreground: 30 7% 12%;
+
+    --accent: 39 44% 52%; /* Gold #B99550 */
+    --accent-soft: 39 44% 94%;
+    --accent-foreground: 30 7% 12%;
+
+    --muted: 38 18% 90%;
+    --muted-foreground: 29 7% 51%;
+
+    --destructive: 355 41% 32%; /* Burgundy */
+    --destructive-foreground: 43 45% 98%;
+
+    --success: 142 32% 26%;
+    --success-foreground: 43 45% 98%;
+
+    --warning: 39 44% 52%;
+    --warning-foreground: 30 7% 12%;
+
+    --info: 210 20% 35%;
+    --info-foreground: 43 45% 98%;
+
+    --border: 34 20% 82%; /* #D9D1C7 */
+    --border-strong: 34 20% 68%;
+    --divider: 34 20% 86%;
+
+    --input: 34 20% 82%;
+    --input-background: 0 0% 100%;
+    --input-border: 34 20% 82%;
+
+    --ring: 355 41% 32%;
+
+    --sidebar-background: 43 45% 97%;
+    --sidebar-foreground: 30 7% 12%;
+    --sidebar-active: 355 41% 32%;
+    --header-background: 43 45% 97%;
+
+    /* Chart Color Tokens */
+    --chart-1: #722f35; /* Editorial Burgundy */
+    --chart-2: #b99550; /* Gold */
+    --chart-3: #2e593e; /* Print Green */
+    --chart-4: #55483f; /* Deep Ink Brown */
+    --chart-5: #8b837b; /* Newsprint Gray */
+
+    --shadow-sm: 0 1px 1px 0 rgba(32, 30, 27, 0.02);
+    --shadow-md: 0 2px 4px -1px rgba(32, 30, 27, 0.04);
+    --shadow-lg: 0 6px 10px -2px rgba(32, 30, 27, 0.06);
+
+    --radius-sm: 0.125rem;
+    --radius-md: 0.25rem;
+    --radius-lg: 0.375rem;
+    --radius: 0.25rem;
+
+    --font-heading: var(--font-newsreader), Georgia, serif;
   }
 }
 
@@ -84,24 +495,31 @@
   * {
     @apply border-border;
   }
+  
+  html {
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+    min-height: 100vh;
   }
-  h1, h2, h3, .font-serif-heading {
+
+  h1, h2, h3, .font-serif {
+    font-family: var(--font-heading);
     font-feature-settings: "liga", "clig", "kern";
   }
 }
 
+/* Subtle, clean transition for theme changes without disrupting layout */
+.theme-transition * {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
 /* Editorial and Financial Ledger Utilities */
 .editorial-card {
-  @apply bg-card border border-border rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.03)];
-}
-
-.fintech-border {
-  @apply border border-border;
-}
-
-.tabular-numbers {
-  font-variant-numeric: tabular-nums;
+  @apply bg-card border border-border rounded-lg shadow-sm;
 }

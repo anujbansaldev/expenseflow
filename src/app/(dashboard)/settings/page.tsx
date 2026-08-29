@@ -13,15 +13,13 @@ import {
   Shield,
   History,
   Lock,
-  Globe,
   Palette,
-  CheckCircle2,
-  AlertTriangle,
 } from "lucide-react";
 import { AuditLogDto } from "@/services/audit.service";
+import { ThemeSelectorCards } from "@/components/theme/theme-selector-cards";
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = React.useState<"profile" | "security" | "audit">("profile");
+  const [activeTab, setActiveTab] = React.useState<"appearance" | "profile" | "security" | "audit">("appearance");
   const [isLoading, setIsLoading] = React.useState(true);
 
   // Profile Form State
@@ -30,7 +28,6 @@ export default function SettingsPage() {
   const [currency, setCurrency] = React.useState("INR");
   const [timezone, setTimezone] = React.useState("UTC");
   const [dateFormat, setDateFormat] = React.useState("yyyy-MM-dd");
-  const [theme, setTheme] = React.useState("system");
   const [isSavingProfile, setIsSavingProfile] = React.useState(false);
 
   // Security / Password Form State
@@ -54,7 +51,6 @@ export default function SettingsPage() {
         setCurrency(json.data.settings.currency || "INR");
         setTimezone(json.data.settings.timezone || "UTC");
         setDateFormat(json.data.settings.dateFormat || "yyyy-MM-dd");
-        setTheme(json.data.settings.theme || "system");
       }
     } catch {
       toast.error("Failed to load settings.");
@@ -100,7 +96,6 @@ export default function SettingsPage() {
           currency,
           timezone,
           dateFormat,
-          theme,
         }),
       });
 
@@ -162,28 +157,39 @@ export default function SettingsPage() {
     <div className="space-y-6 sm:space-y-8">
       {/* Header */}
       <div className="border-b border-border/80 pb-5">
-        <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-foreground">Settings &amp; Security Protocol</h2>
+        <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-foreground">Settings &amp; Workspace Style</h2>
         <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 font-normal">
-          Manage your account credentials, base display preferences, and security audit log.
+          Customize your financial environment theme, ledger preferences, account security, and view audit trail.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-border/80 pb-3">
+      <div className="flex items-center gap-2 border-b border-border/80 pb-3 overflow-x-auto">
+        <button
+          onClick={() => setActiveTab("appearance")}
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded whitespace-nowrap transition-colors ${
+            activeTab === "appearance"
+              ? "bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Palette className="w-3.5 h-3.5" />
+          Appearance &amp; Themes
+        </button>
         <button
           onClick={() => setActiveTab("profile")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded whitespace-nowrap transition-colors ${
             activeTab === "profile"
               ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <User className="w-3.5 h-3.5" />
-          Profile &amp; Display
+          Profile &amp; Ledger
         </button>
         <button
           onClick={() => setActiveTab("security")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded whitespace-nowrap transition-colors ${
             activeTab === "security"
               ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
@@ -194,7 +200,7 @@ export default function SettingsPage() {
         </button>
         <button
           onClick={() => setActiveTab("audit")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded whitespace-nowrap transition-colors ${
             activeTab === "audit"
               ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
@@ -205,13 +211,20 @@ export default function SettingsPage() {
         </button>
       </div>
 
-      {/* Tab 1: Profile & Preferences */}
+      {/* Tab 1: Appearance & Workspace Style */}
+      {activeTab === "appearance" && (
+        <div className="space-y-6">
+          <ThemeSelectorCards />
+        </div>
+      )}
+
+      {/* Tab 2: Profile & Preferences */}
       {activeTab === "profile" && (
         <Card className="max-w-2xl shadow-none">
           <CardHeader className="p-4 sm:p-5 pb-3">
             <CardTitle className="text-sm sm:text-base font-serif font-bold text-foreground">Personal &amp; Financial Preferences</CardTitle>
             <CardDescription className="text-xs">
-              Customize how dates, money, and timezones appear across all dashboards and reports.
+              Customize how dates, currency symbols, and timezones calculate across all dashboards and ledger journals.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4 sm:p-5 pt-0">
@@ -275,19 +288,6 @@ export default function SettingsPage() {
                       <option value="MM/dd/yyyy">MM/DD/YYYY (08/29/2026)</option>
                     </select>
                   </div>
-
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-semibold text-muted-foreground">App Theme</label>
-                    <select
-                      className="flex h-8 w-full rounded border border-input bg-background px-2.5 py-1 text-xs focus-visible:ring-1 focus-visible:ring-ring"
-                      value={theme}
-                      onChange={(e) => setTheme(e.target.value)}
-                    >
-                      <option value="system">System Default</option>
-                      <option value="light">Light Mode</option>
-                      <option value="dark">Dark Mode</option>
-                    </select>
-                  </div>
                 </div>
 
                 <div className="pt-3 border-t border-border/80 flex justify-end">
@@ -301,7 +301,7 @@ export default function SettingsPage() {
         </Card>
       )}
 
-      {/* Tab 2: Security & Password */}
+      {/* Tab 3: Security & Password */}
       {activeTab === "security" && (
         <Card className="max-w-2xl shadow-none">
           <CardHeader className="p-4 sm:p-5 pb-3">
@@ -364,7 +364,7 @@ export default function SettingsPage() {
         </Card>
       )}
 
-      {/* Tab 3: Security Audit Trail */}
+      {/* Tab 4: Security Audit Trail */}
       {activeTab === "audit" && (
         <Card className="max-w-3xl shadow-none">
           <CardHeader className="p-4 sm:p-5 pb-3">

@@ -13,6 +13,7 @@ import {
 import { formatMinorUnits, toMajorUnits } from "@/lib/money/money";
 import { formatDate } from "@/lib/dates/dates";
 import { CashFlowTrendPoint } from "@/repositories/analytics.repository";
+import { useTheme } from "@/components/theme/theme-provider";
 
 interface CashFlowChartProps {
   data: CashFlowTrendPoint[];
@@ -20,6 +21,8 @@ interface CashFlowChartProps {
 }
 
 export function CashFlowChart({ data, currency = "INR" }: CashFlowChartProps) {
+  const { themeConfig } = useTheme();
+
   if (!data || data.length === 0) {
     return (
       <div className="h-[280px] flex flex-col items-center justify-center text-center p-4">
@@ -40,18 +43,21 @@ export function CashFlowChart({ data, currency = "INR" }: CashFlowChartProps) {
     expenseMinor: d.expenseMinor,
   }));
 
+  const inflowColor = themeConfig.preview.chart[2] || "#2D5A3C";
+  const outflowColor = themeConfig.preview.chart[0] || "#651F24";
+
   return (
     <div className="w-full h-[280px] sm:h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#2D5A3C" stopOpacity={0.2} />
-              <stop offset="95%" stopColor="#2D5A3C" stopOpacity={0.0} />
+              <stop offset="5%" stopColor={inflowColor} stopOpacity={0.25} />
+              <stop offset="95%" stopColor={inflowColor} stopOpacity={0.0} />
             </linearGradient>
             <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#651F24" stopOpacity={0.2} />
-              <stop offset="95%" stopColor="#651F24" stopOpacity={0.0} />
+              <stop offset="5%" stopColor={outflowColor} stopOpacity={0.25} />
+              <stop offset="95%" stopColor={outflowColor} stopOpacity={0.0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="2 2" vertical={false} className="stroke-border/40" />
@@ -75,11 +81,17 @@ export function CashFlowChart({ data, currency = "INR" }: CashFlowChartProps) {
                 return (
                   <div className="rounded border border-border bg-card p-2.5 shadow-sm text-xs space-y-1 min-w-[140px]">
                     <p className="font-semibold text-foreground border-b border-border/60 pb-1 text-[11px]">{label}</p>
-                    <div className="flex items-center justify-between text-emerald-700 dark:text-emerald-400 text-[11px]">
+                    <div
+                      className="flex items-center justify-between text-[11px] font-medium"
+                      style={{ color: inflowColor }}
+                    >
                       <span>Inflow:</span>
                       <span className="font-bold font-mono">{formatMinorUnits(income, { currency })}</span>
                     </div>
-                    <div className="flex items-center justify-between text-rose-800 dark:text-rose-400 text-[11px]">
+                    <div
+                      className="flex items-center justify-between text-[11px] font-medium"
+                      style={{ color: outflowColor }}
+                    >
                       <span>Outflow:</span>
                       <span className="font-bold font-mono">{formatMinorUnits(expense, { currency })}</span>
                     </div>
@@ -92,7 +104,7 @@ export function CashFlowChart({ data, currency = "INR" }: CashFlowChartProps) {
           <Area
             type="monotone"
             dataKey="income"
-            stroke="#2D5A3C"
+            stroke={inflowColor}
             strokeWidth={2}
             fillOpacity={1}
             fill="url(#incomeGradient)"
@@ -101,7 +113,7 @@ export function CashFlowChart({ data, currency = "INR" }: CashFlowChartProps) {
           <Area
             type="monotone"
             dataKey="expense"
-            stroke="#651F24"
+            stroke={outflowColor}
             strokeWidth={2}
             fillOpacity={1}
             fill="url(#expenseGradient)"

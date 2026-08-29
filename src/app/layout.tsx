@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Newsreader } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/app-shell/theme-provider";
+import { ThemeProvider, ThemeScript } from "@/components/theme/theme-provider";
 import { Toaster } from "sonner";
 
 const inter = Inter({
@@ -33,14 +33,13 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
       className={`${inter.variable} ${newsreader.variable}`}
+      data-theme="heritage"
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased selection:bg-primary/20 selection:text-primary">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider>
           {children}
           <Toaster richColors position="top-right" />
         </ThemeProvider>

@@ -1,16 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Plus, Bell, User, LogOut } from "lucide-react";
+import { Plus, User, LogOut } from "lucide-react";
 import { navigationItems } from "./sidebar";
+import { ThemePickerHeader } from "@/components/theme/theme-picker-header";
 import Link from "next/link";
 import { toast } from "sonner";
 
 export function Header() {
-  const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const router = useRouter();
   const [userName, setUserName] = React.useState<string | null>(null);
@@ -63,17 +62,8 @@ export function Header() {
           </Button>
         </Link>
 
-        {/* Theme Toggle */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-muted-foreground hover:text-foreground"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          aria-label="Toggle theme"
-        >
-          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        </Button>
+        {/* Quick Theme Switcher */}
+        <ThemePickerHeader />
 
         {/* User Pill & Logout */}
         <div className="flex items-center gap-1.5 pl-2 border-l border-border">
