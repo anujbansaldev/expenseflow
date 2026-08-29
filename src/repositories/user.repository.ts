@@ -12,9 +12,13 @@ export class UserRepository {
     return query.exec();
   }
 
-  async findById(id: string | mongoose.Types.ObjectId): Promise<IUser | null> {
+  async findById(id: string | mongoose.Types.ObjectId, includePassword = false): Promise<IUser | null> {
     await connectToDatabase();
-    return User.findById(id).exec();
+    const query = User.findById(id);
+    if (includePassword) {
+      query.select("+passwordHash");
+    }
+    return query.exec();
   }
 
   async create(data: {
@@ -31,6 +35,14 @@ export class UserRepository {
       status: data.status || "active",
     });
     return user.save();
+  }
+
+  async update(
+    id: string | mongoose.Types.ObjectId,
+    updates: Partial<IUser>
+  ): Promise<IUser | null> {
+    await connectToDatabase();
+    return User.findByIdAndUpdate(id, { $set: updates }, { new: true }).exec();
   }
 
   async updateLastLogin(id: string | mongoose.Types.ObjectId): Promise<void> {
