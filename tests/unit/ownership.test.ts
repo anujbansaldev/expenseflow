@@ -9,6 +9,10 @@ describe("Cross-User Ownership Authorization", () => {
   const accountOfUserB = "64b0f89e2c1e4b001abbbbbb";
   const categoryOfUserB = "64b0f89e2c1e4b001acccccc";
 
+  const mockTxRepo: any = {
+    getAccountLedgerDelta: vi.fn().mockResolvedValue(0),
+  };
+
   it("prevents User A from viewing User B's account", async () => {
     const mockRepo: any = {
       findByIdAndUserId: vi.fn().mockImplementation((id: string, userId: string) => {
@@ -30,7 +34,7 @@ describe("Cross-User Ownership Authorization", () => {
       }),
     };
 
-    const service = new AccountService(mockRepo);
+    const service = new AccountService(mockRepo, mockTxRepo);
 
     // User B can access their own account
     const accB = await service.getAccount(accountOfUserB, userB);
@@ -48,7 +52,7 @@ describe("Cross-User Ownership Authorization", () => {
       archive: vi.fn().mockResolvedValue(null),
     };
 
-    const service = new AccountService(mockRepo);
+    const service = new AccountService(mockRepo, mockTxRepo);
 
     await expect(
       service.updateAccount(accountOfUserB, userA, { name: "Hacked Name" })
