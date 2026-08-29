@@ -99,7 +99,6 @@ const TransactionSchema = new Schema<ITransaction>(
     },
     recurringOccurrenceKey: {
       type: String,
-      sparse: true,
     },
   },
   {
@@ -111,8 +110,15 @@ const TransactionSchema = new Schema<ITransaction>(
 TransactionSchema.index({ userId: 1, occurredAt: -1, _id: -1 });
 TransactionSchema.index({ userId: 1, accountId: 1, occurredAt: -1 });
 TransactionSchema.index({ userId: 1, categoryId: 1, occurredAt: -1 });
-TransactionSchema.index({ userId: 1, type: 1, occurredAt: -1 });
-TransactionSchema.index({ userId: 1, recurringOccurrenceKey: 1 }, { sparse: true, unique: true });
+TransactionSchema.index(
+  { userId: 1, recurringOccurrenceKey: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      recurringOccurrenceKey: { $type: "string" },
+    },
+  }
+);
 
 export const Transaction: Model<ITransaction> =
   mongoose.models.Transaction ||
