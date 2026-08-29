@@ -1,94 +1,99 @@
-# ExpenseFlow — Next.js + MongoDB Development Build Kit
+# 💰 ExpenseFlow — Production Financial Ledger & Analytics
 
-This package is the implementation blueprint for a production-oriented expense tracking application.
+ExpenseFlow is a senior-grade, full-stack personal finance application built with **Next.js 15 (App Router)**, **TypeScript**, **Tailwind CSS**, **MongoDB / Mongoose**, and **Recharts**.
 
-**Working product name:** ExpenseFlow  
-**Primary stack:** Next.js App Router + TypeScript + MongoDB + Mongoose  
-**Target:** Responsive web application / installable PWA-ready architecture  
-**Development workflow:** Google Antigravity agent-driven implementation
+Designed with strict financial accounting standards, ExpenseFlow uses integer minor units for all balances and transactions to completely eliminate floating-point rounding errors, enforces server-scoped tenant isolation, and provides automated recurring schedules, monthly category budget limits, savings milestones, and formula-injection-safe analytical exports.
 
-> ExpenseFlow is a working name. Rename it before launch if required.
+---
 
-## What is included
+## ✨ Key Features
 
-- Product requirements and functional scope
-- Technical architecture
-- MongoDB data model
-- API contract
-- Authentication and authorization requirements
-- Security rules
-- UI/UX design system and page map
-- Financial business rules
-- Validation and error handling rules
-- Testing strategy
-- Deployment and operational guidance
-- Acceptance criteria
-- Implementation roadmap
-- Antigravity master prompt
-- Phase-by-phase Antigravity prompts
-- Code review and bug-fix prompts
-- Environment variable template
-- Seed-data specification
-- Recommended source tree
+- **Double-Entry Financial Ledger**: Real-time derived account balances, multi-account atomic transfers, income and expense categorization.
+- **Strict Minor Unit Math**: All monetary amounts are persisted as integer minor units (`amountMinor`) with zero floating-point arithmetic.
+- **Analytics & Real-Time Dashboard**: MongoDB `$group` aggregation pipelines powering cash flow area charts, category expense donuts, and monthly delta KPI tiles.
+- **Category Budgets & Alerts**: Real-time month-to-date spending calculation with dynamic warning (`≥ 80%`) and exceeded (`> 100%`) status badges.
+- **Idempotent Recurring Automation**: Daily, weekly, monthly, and yearly recurring schedules with unique occurrence keys preventing duplicate transactions on scheduler retries.
+- **Bill Due-Date Tracker**: Track upcoming and overdue bills, with atomic "Mark Paid" actions that automatically link expense entries into the ledger.
+- **Savings Milestones & Goals**: Capital accumulation targets with progress bars, contribution audit logs, and days-remaining countdowns.
+- **Interactive Financial Calendar**: Month-by-month financial event calendar grouping income cash-ins, expense outflows, bill due dates, and routine schedules.
+- **Analytical Reports & Safe CSV Export**: Custom date-range breakdowns with spreadsheet formula injection protection (neutralizing `=`, `+`, `-`, `@` triggers).
+- **Hardened Security & Audit**: Jose session JWTs, adaptive bcrypt password hashing, sliding-window rate limiting, HTTP security headers (CSP, HSTS, X-Frame-Options), and scrubbed security audit trails.
 
-## Recommended implementation strategy
+---
 
-Do **not** ask the coding agent to build the whole platform in a single uncontrolled pass.
+## 🛠️ Technology Stack
 
-Use:
+| Layer | Technology |
+|---|---|
+| **Framework** | Next.js 15 (App Router, Server Components & Route Handlers) |
+| **Language** | TypeScript (Strict Mode) |
+| **Styling** | Tailwind CSS & Lucide Icons |
+| **Database** | MongoDB & Mongoose ODM |
+| **Validation** | Zod Schema Validation |
+| **Charts** | Recharts (Responsive Cash Flow & Category Donut) |
+| **Dates** | date-fns |
+| **Security** | Jose JWT, Bcrypt.js, Web Crypto SHA-256 |
+| **Testing** | Vitest Test Runner (69+ Unit, Fixture & Security Tests) |
+| **Package Manager** | pnpm |
 
-1. `00-START-HERE.md`
-2. `AGENTS.md`
-3. `prompts/00-ANTIGRAVITY-MASTER-PROMPT.md`
-4. Run the prompts in `prompts/01` through `prompts/10` sequentially.
-5. At the end of each phase, run tests, linting and type checking before moving forward.
-6. Use `prompts/99-CODE-REVIEW-PROMPT.md` before production deployment.
+---
 
-## Core engineering decisions
+## 🚀 Getting Started
 
-- Next.js App Router is used for frontend and backend.
-- TypeScript strict mode is mandatory.
-- MongoDB is the source database.
-- Mongoose is used for schema modelling and indexes.
-- Monetary values are stored as **integer minor units**, never floating-point currency.
-  - INR: `₹1,234.56` → `123456` paise.
-- All private data is always scoped to the authenticated user.
-- Server-side authorization is mandatory even when the UI hides an action.
-- Zod validates untrusted input at every server boundary.
-- Transfers are atomic and must never create inconsistent account balances.
-- Ledger transactions are the source of truth.
-- Destructive operations must be protected and auditable.
-- Secrets must never be committed or exposed to browser bundles.
-- Accessibility and responsive behaviour are acceptance requirements, not optional polish.
+### Prerequisites
+- Node.js 20.x or higher
+- pnpm (`npm install -g pnpm`)
+- MongoDB instance (local or MongoDB Atlas)
 
-## MVP modules
+### Installation
 
-1. Authentication
-2. Dashboard
-3. Accounts
-4. Categories
-5. Transactions
-6. Transfers
-7. Budgets
-8. Recurring transactions
-9. Bills/reminders
-10. Savings goals
-11. Analytics
-12. Reports/export
-13. Calendar
-14. Settings
-15. Audit/security foundations
+1. **Clone the repository**:
+   ```bash
+   git clone git@github.com:anujbansaldev/expenseflow.git
+   cd expenseflow
+   ```
 
-## Future modules
+2. **Install dependencies**:
+   ```bash
+   pnpm install
+   ```
 
-- CSV/Excel import
-- Receipt upload and OCR
-- AI categorisation
-- WhatsApp entry
-- Shared/family workspaces
-- Multi-currency
-- GST/business expense mode
-- Bank integrations
-- Mobile application/API extraction
+3. **Configure environment variables**:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Set `MONGODB_URI` and `AUTH_SECRET` in `.env.local`.
 
-See `docs/16-FUTURE-ROADMAP.md`.
+4. **Start the development server**:
+   ```bash
+   pnpm dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 🧪 Testing & Quality Verification
+
+Run the automated test suite covering financial arithmetic, atomic transfers, idempotency, calendar bounding, CSV formula injection defense, and security attack simulations:
+
+```bash
+# Run Vitest test suite
+pnpm test
+
+# Run strict TypeScript type checking
+pnpm typecheck
+
+# Build optimized production bundle
+pnpm build
+```
+
+---
+
+## 📖 Deployment & Runbooks
+
+For detailed staging and production deployment instructions, Docker containerization, Vercel cron scheduling, and database disaster recovery runbooks, refer to [DEPLOYMENT.md](file:///c:/Users/anujb/Documents/Portfolio%20Projects/Standalone%20Apps/5.Expense%20Tracker/03%20ExpenseFlow-Antigravity-Build-Kit/DEPLOYMENT.md).
+
+---
+
+## 📄 License
+MIT
