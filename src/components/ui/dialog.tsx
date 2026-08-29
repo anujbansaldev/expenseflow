@@ -35,16 +35,16 @@ export function Dialog({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in-0 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in-0 duration-150">
       <div
         className={cn(
-          "w-full max-w-lg rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-2xl animate-in zoom-in-95 duration-200",
+          "w-full max-w-lg rounded-lg border border-border bg-card p-5 sm:p-6 text-card-foreground shadow-lg animate-in zoom-in-98 duration-150",
           className
         )}
       >
-        <div className="flex items-center justify-between pb-4 border-b border-border mb-5">
+        <div className="flex items-center justify-between pb-3.5 border-b border-border/80 mb-4">
           <div>
-            <h2 className="text-lg font-bold tracking-tight">{title}</h2>
+            <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground">{title}</h2>
             {description && (
               <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
             )}

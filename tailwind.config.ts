@@ -13,7 +13,7 @@ const config: Config = {
       center: true,
       padding: "1.5rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1340px",
       },
     },
     extend: {
@@ -59,12 +59,21 @@ const config: Config = {
           DEFAULT: "hsl(var(--warning))",
           foreground: "hsl(var(--warning-foreground))",
         },
-        brand: {
-          50: "#eef2ff",
-          100: "#e0e7ff",
-          500: "#6366f1",
-          600: "#4f46e5",
-          700: "#4338ca",
+        fintech: {
+          maroon: "#651F24",
+          burgundy: "#7A292E",
+          darkBrown: "#3A2923",
+          warmBrown: "#6B4636",
+          rust: "#A64B2A",
+          burntOrange: "#B86632",
+          gold: "#C49A45",
+          softGold: "#D6B66A",
+          ivory: "#F8F5EF",
+          cream: "#F3EEE5",
+          warmWhite: "#FFFCF7",
+          charcoal: "#292522",
+          mutedGray: "#756B63",
+          softBorder: "#DED5C9",
         },
       },
       borderRadius: {
@@ -73,8 +82,9 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "monospace"],
+        sans: ["var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "Cambria", "serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
     },
   },

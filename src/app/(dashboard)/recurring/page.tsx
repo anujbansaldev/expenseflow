@@ -250,29 +250,29 @@ export default function RecurringPage() {
   const filteredCategoriesForForm = categories.filter((c) => c.type === type && !c.isArchived);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/80 pb-5">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Recurring Schedules</h2>
-          <p className="text-sm text-muted-foreground">
-            Automate routine salary deposits, subscriptions, utility bills, and loan repayments.
+          <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-foreground">Automated Recurring Schedules</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 font-normal">
+            Automate routine salary deposits, subscription charges, utilities, and scheduled ledger postings.
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <Button
             variant="outline"
             size="sm"
             onClick={handleProcessDue}
             disabled={isProcessing}
-            className="gap-1.5 font-semibold text-xs"
+            className="h-8 gap-1.5 font-medium text-xs"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isProcessing ? "animate-spin" : ""}`} />
             Run Due Schedules
           </Button>
-          <Button size="sm" onClick={handleOpenAdd} className="gap-1.5 font-semibold">
-            <Plus className="w-4 h-4" />
-            New Recurring Rule
+          <Button size="sm" onClick={handleOpenAdd} className="h-8 gap-1.5 text-xs font-semibold">
+            <Plus className="w-3.5 h-3.5" />
+            New Schedule
           </Button>
         </div>
       </div>
@@ -281,64 +281,55 @@ export default function RecurringPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
-            <Card key={i} className="p-5 space-y-3">
-              <Skeleton className="h-5 w-28" />
-              <Skeleton className="h-8 w-36" />
-              <Skeleton className="h-4 w-full" />
+            <Card key={i} className="p-4 space-y-2">
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-6 w-36" />
+              <Skeleton className="h-3 w-full" />
             </Card>
           ))}
         </div>
       ) : rules.length === 0 ? (
-        <Card className="p-12 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
-            <Repeat className="w-6 h-6" />
-          </div>
-          <h3 className="text-base font-bold">No recurring schedules</h3>
+        <Card className="p-8 text-center shadow-none">
+          <h3 className="text-sm font-serif font-bold text-foreground">No recurring schedules</h3>
           <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1 mb-4">
-            Set up automatic recurrence for your salary, rent, Netflix, or insurance premiums.
+            Set up automatic recurrence for your salary, rent, subscriptions, or insurance premiums.
           </p>
-          <Button size="sm" onClick={handleOpenAdd}>
-            <Plus className="w-4 h-4 mr-1.5" />
+          <Button size="sm" onClick={handleOpenAdd} className="h-8 text-xs">
+            <Plus className="w-3.5 h-3.5 mr-1" />
             Add Recurring Schedule
           </Button>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {rules.map((rule) => {
             const isIncome = rule.type === "income";
 
             return (
               <Card
                 key={rule.id}
-                className={`shadow-sm hover:shadow-md transition-all ${
-                  !rule.isActive ? "opacity-60 bg-muted/20" : "bg-card"
+                className={`shadow-none ${
+                  !rule.isActive ? "opacity-50 bg-muted/20" : "bg-card"
                 }`}
               >
-                <CardHeader className="flex flex-row items-start justify-between pb-2">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${
-                        isIncome
-                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                          : "bg-rose-500/10 text-rose-600 dark:text-rose-400"
-                      }`}
-                    >
+                <CardHeader className="flex flex-row items-start justify-between pb-1.5 p-4 sm:p-5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded border border-border/80 bg-background flex items-center justify-center text-foreground shrink-0">
                       {isIncome ? (
-                        <ArrowUpRight className="w-4 h-4" />
+                        <ArrowUpRight className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400" />
                       ) : (
-                        <ArrowDownRight className="w-4 h-4" />
+                        <ArrowDownRight className="w-3.5 h-3.5 text-rose-800 dark:text-rose-400" />
                       )}
                     </div>
                     <div>
-                      <CardTitle className="text-base flex items-center gap-1.5">
+                      <CardTitle className="text-sm sm:text-base font-serif font-bold flex items-center gap-1.5 text-foreground">
                         {rule.merchant || rule.categoryName}
                         {!rule.isActive && (
-                          <Badge variant="outline" className="text-[10px]">
+                          <Badge variant="outline" className="text-[9px]">
                             Paused
                           </Badge>
                         )}
                       </CardTitle>
-                      <CardDescription className="text-xs capitalize">
+                      <CardDescription className="text-[11px] capitalize mt-0.5">
                         {rule.frequency} • {rule.categoryName}
                       </CardDescription>
                     </div>
@@ -348,52 +339,66 @@ export default function RecurringPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground"
+                      className="h-7 w-7 text-muted-foreground"
                       onClick={() => handleTogglePause(rule)}
                       title={rule.isActive ? "Pause" : "Resume"}
                       aria-label={rule.isActive ? "Pause recurring rule" : "Resume recurring rule"}
                     >
                       {rule.isActive ? (
-                        <Pause className="w-3.5 h-3.5" />
+                        <Pause className="w-3 h-3" />
                       ) : (
-                        <Play className="w-3.5 h-3.5 text-emerald-500" />
+                        <Play className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                       )}
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground"
+                      className="h-7 w-7 text-muted-foreground"
                       onClick={() => handleOpenEdit(rule)}
                       aria-label="Edit recurring rule"
                     >
-                      <Pencil className="w-3.5 h-3.5" />
+                      <Pencil className="w-3 h-3" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                      className="h-7 w-7 text-muted-foreground hover:text-destructive"
                       onClick={() => handleDeleteRule(rule.id)}
                       aria-label="Delete recurring rule"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-3 h-3" />
                     </Button>
                   </div>
                 </CardHeader>
 
-                <CardContent className="pt-2 space-y-2.5">
-                  <div
-                    className={`text-xl font-bold font-mono ${
-                      isIncome
-                        ? "text-emerald-600 dark:text-emerald-400"
-                        : "text-rose-600 dark:text-rose-400"
-                    }`}
-                  >
-                    {isIncome ? "+" : "−"}
-                    {formatMinorUnits(rule.amountMinor, { currency: rule.currency })}
-                  </div>
+                <CardContent className="space-y-3 p-4 sm:p-5 pt-0">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
+                        Amount
+                      </span>
+                      <span
+                        className={`text-lg sm:text-xl font-bold font-mono ${
+                          isIncome
+                            ? "text-emerald-700 dark:text-emerald-400"
+                            : "text-foreground"
+                        }`}
+                      >
+                        {isIncome ? "+" : "−"}
+                        {formatMinorUnits(rule.amountMinor, { currency: rule.currency })}
+                      </span>
+                    </div>
 
-                  <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border/60 pt-2">
-                    <span>Target: {rule.accountName}</span>
+                    <div className="text-right">
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
+                        Account
+                      </span>
+                      <span className="text-xs text-muted-foreground font-medium">
+                        {rule.accountName}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-xs text-muted-foreground border-t border-border/60 pt-3 mt-1">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3 h-3 text-primary" />
                       Next: {formatDate(rule.nextRunAt)}

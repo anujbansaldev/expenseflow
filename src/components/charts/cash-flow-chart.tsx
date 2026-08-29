@@ -23,9 +23,9 @@ export function CashFlowChart({ data, currency = "INR" }: CashFlowChartProps) {
   if (!data || data.length === 0) {
     return (
       <div className="h-[280px] flex flex-col items-center justify-center text-center p-4">
-        <p className="text-sm font-semibold text-muted-foreground">No cash flow activity in this period</p>
-        <p className="text-xs text-muted-foreground/80 mt-1">
-          Transactions recorded in this date range will plot your income vs expense curves.
+        <p className="text-xs font-semibold text-muted-foreground">No cash flow activity in this period</p>
+        <p className="text-[11px] text-muted-foreground/80 mt-0.5">
+          Recorded income and expense entries will plot your cash velocity curves here.
         </p>
       </div>
     );
@@ -41,31 +41,31 @@ export function CashFlowChart({ data, currency = "INR" }: CashFlowChartProps) {
   }));
 
   return (
-    <div className="w-full h-[300px]">
+    <div className="w-full h-[280px] sm:h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
-              <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
+              <stop offset="5%" stopColor="#2D5A3C" stopOpacity={0.2} />
+              <stop offset="95%" stopColor="#2D5A3C" stopOpacity={0.0} />
             </linearGradient>
             <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.4} />
-              <stop offset="95%" stopColor="#f43f5e" stopOpacity={0.0} />
+              <stop offset="5%" stopColor="#651F24" stopOpacity={0.2} />
+              <stop offset="95%" stopColor="#651F24" stopOpacity={0.0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-border/50" />
+          <CartesianGrid strokeDasharray="2 2" vertical={false} className="stroke-border/40" />
           <XAxis
             dataKey="date"
             tickLine={false}
             axisLine={false}
-            tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+            tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
           />
           <YAxis
             tickLine={false}
             axisLine={false}
             tickFormatter={(val) => `₹${val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val}`}
-            tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+            tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
           />
           <Tooltip
             content={({ active, payload, label }) => {
@@ -73,14 +73,14 @@ export function CashFlowChart({ data, currency = "INR" }: CashFlowChartProps) {
                 const income = payload.find((p) => p.dataKey === "income")?.payload.incomeMinor || 0;
                 const expense = payload.find((p) => p.dataKey === "expense")?.payload.expenseMinor || 0;
                 return (
-                  <div className="rounded-xl border border-border bg-card p-3 shadow-xl text-xs space-y-1.5 min-w-[150px]">
-                    <p className="font-bold text-foreground border-b border-border pb-1">{label}</p>
-                    <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400">
-                      <span>Income:</span>
+                  <div className="rounded border border-border bg-card p-2.5 shadow-sm text-xs space-y-1 min-w-[140px]">
+                    <p className="font-semibold text-foreground border-b border-border/60 pb-1 text-[11px]">{label}</p>
+                    <div className="flex items-center justify-between text-emerald-700 dark:text-emerald-400 text-[11px]">
+                      <span>Inflow:</span>
                       <span className="font-bold font-mono">{formatMinorUnits(income, { currency })}</span>
                     </div>
-                    <div className="flex items-center justify-between text-rose-600 dark:text-rose-400">
-                      <span>Expense:</span>
+                    <div className="flex items-center justify-between text-rose-800 dark:text-rose-400 text-[11px]">
+                      <span>Outflow:</span>
                       <span className="font-bold font-mono">{formatMinorUnits(expense, { currency })}</span>
                     </div>
                   </div>
@@ -92,8 +92,8 @@ export function CashFlowChart({ data, currency = "INR" }: CashFlowChartProps) {
           <Area
             type="monotone"
             dataKey="income"
-            stroke="#10b981"
-            strokeWidth={2.5}
+            stroke="#2D5A3C"
+            strokeWidth={2}
             fillOpacity={1}
             fill="url(#incomeGradient)"
             name="Income"
@@ -101,8 +101,8 @@ export function CashFlowChart({ data, currency = "INR" }: CashFlowChartProps) {
           <Area
             type="monotone"
             dataKey="expense"
-            stroke="#f43f5e"
-            strokeWidth={2.5}
+            stroke="#651F24"
+            strokeWidth={2}
             fillOpacity={1}
             fill="url(#expenseGradient)"
             name="Expense"

@@ -4,77 +4,79 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 43 37% 95%; /* Warm Ivory #F8F5EF */
+    --foreground: 26 9% 15%; /* Charcoal #292522 */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 38 100% 98.5%; /* Warm White #FFFCF7 */
+    --card-foreground: 26 9% 15%; /* Charcoal #292522 */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 38 100% 98.5%;
+    --popover-foreground: 26 9% 15%;
 
-    --primary: 238 82% 59%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 356 53% 26%; /* Deep Maroon #651F24 */
+    --primary-foreground: 38 100% 98.5%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 39 33% 93%; /* Cream #F3EEE5 */
+    --secondary-foreground: 16 25% 18%; /* Dark Brown #3A2923 */
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 38 27% 90%;
+    --muted-foreground: 27 9% 43%; /* Muted Brown Gray #756B63 */
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 39 33% 93%;
+    --accent-foreground: 356 53% 26%;
 
-    --destructive: 346 84% 61%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 16 60% 41%; /* Rust #A64B2A */
+    --destructive-foreground: 38 100% 98.5%;
 
-    --success: 158 75% 40%;
-    --success-foreground: 210 40% 98%;
+    --success: 140 33% 26%; /* Muted Deep Green #2D5A3C */
+    --success-foreground: 38 100% 98.5%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 222.2 84% 4.9%;
+    --warning: 40 53% 52%; /* Antique Gold #C49A45 */
+    --warning-foreground: 16 25% 18%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 238 82% 59%;
+    --border: 36 24% 83%; /* Soft Warm Border #DED5C9 */
+    --input: 36 24% 83%;
+    --ring: 40 53% 52%; /* Antique Gold #C49A45 */
 
-    --radius: 0.75rem;
+    --radius: 0.5rem; /* 8px */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 24 10% 10%; /* Dark Espresso Charcoal #1C1917 */
+    --foreground: 43 37% 95%; /* Warm Ivory #F8F5EF */
 
-    --card: 222.2 84% 6.5%;
-    --card-foreground: 210 40% 98%;
+    --card: 13 14% 13%; /* Dark Warm Brown Charcoal #251E1C */
+    --card-foreground: 43 37% 95%;
 
-    --popover: 222.2 84% 6.5%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 13 14% 13%;
+    --popover-foreground: 43 37% 95%;
 
-    --primary: 238 82% 64%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 356 53% 36%; /* Burgundy / Maroon #85292F */
+    --primary-foreground: 38 100% 98.5%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 20 12% 15%; /* Dark Charcoal Surface #2C2522 */
+    --secondary-foreground: 42 57% 63%; /* Soft Gold #D6B66A */
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 18 13% 16%;
+    --muted-foreground: 26 10% 58%; /* Soft Muted Gray #9E9289 */
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 20 12% 15%;
+    --accent-foreground: 42 57% 63%;
 
-    --destructive: 346 84% 61%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 16 57% 46%; /* Rust #B85532 */
+    --destructive-foreground: 38 100% 98.5%;
 
-    --success: 158 75% 42%;
-    --success-foreground: 210 40% 98%;
+    --success: 140 33% 36%; /* Forest Green #3E7B52 */
+    --success-foreground: 38 100% 98.5%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 222.2 84% 4.9%;
+    --warning: 42 57% 63%; /* Soft Gold #D6B66A */
+    --warning-foreground: 24 10% 10%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 238 82% 64%;
+    --border: 24 14% 21%; /* Dark Border #3D332D */
+    --input: 24 14% 21%;
+    --ring: 42 57% 63%;
+
+    --radius: 0.5rem; /* 8px */
   }
 }
 
@@ -83,16 +85,23 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/20;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+  }
+  h1, h2, h3, .font-serif-heading {
+    font-feature-settings: "liga", "clig", "kern";
   }
 }
 
-/* Glassmorphic utilities for financial cards */
-.glass-panel {
-  @apply bg-card/80 backdrop-blur-md border border-border/60 shadow-sm;
+/* Editorial and Financial Ledger Utilities */
+.editorial-card {
+  @apply bg-card border border-border rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.03)];
 }
 
-.subtle-ring {
-  @apply ring-1 ring-border/50;
+.fintech-border {
+  @apply border border-border;
+}
+
+.tabular-numbers {
+  font-variant-numeric: tabular-nums;
 }

@@ -244,28 +244,28 @@ export default function BillsPage() {
   const displayedBills = activeTab === "pending" ? pendingBills : paidBills;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/80 pb-5">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Upcoming Bills &amp; Dues</h2>
-          <p className="text-sm text-muted-foreground">
-            Track utility bills, credit dues, subscriptions, and mark paid with instant ledger recording.
+          <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-foreground">Upcoming Bills &amp; Fixed Dues</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 font-normal">
+            Track utility schedules, credit invoices, subscriptions, and execute 1-click ledger payments.
           </p>
         </div>
-        <Button size="sm" onClick={handleOpenAdd} className="gap-1.5 font-semibold">
-          <Plus className="w-4 h-4" />
+        <Button size="sm" onClick={handleOpenAdd} className="h-8 gap-1.5 text-xs font-semibold">
+          <Plus className="w-3.5 h-3.5" />
           Add Bill
         </Button>
       </div>
 
       {/* Type Tabs */}
-      <div className="flex items-center gap-2 border-b border-border pb-3">
+      <div className="flex items-center gap-2 border-b border-border/80 pb-3">
         <button
           onClick={() => setActiveTab("pending")}
-          className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+          className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
             activeTab === "pending"
-              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 shadow-sm"
+              ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
@@ -273,9 +273,9 @@ export default function BillsPage() {
         </button>
         <button
           onClick={() => setActiveTab("paid")}
-          className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+          className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
             activeTab === "paid"
-              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shadow-sm"
+              ? "bg-emerald-700 text-white dark:bg-emerald-600"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
@@ -287,19 +287,16 @@ export default function BillsPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
-            <Card key={i} className="p-5 space-y-3">
-              <Skeleton className="h-5 w-32" />
-              <Skeleton className="h-8 w-28" />
-              <Skeleton className="h-4 w-full" />
+            <Card key={i} className="p-4 space-y-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-6 w-24" />
+              <Skeleton className="h-3 w-full" />
             </Card>
           ))}
         </div>
       ) : displayedBills.length === 0 ? (
-        <Card className="p-12 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
-            <CalendarDays className="w-6 h-6" />
-          </div>
-          <h3 className="text-base font-bold">
+        <Card className="p-8 text-center shadow-none">
+          <h3 className="text-sm font-serif font-bold text-foreground">
             No {activeTab === "pending" ? "pending" : "paid"} bills
           </h3>
           <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1 mb-4">
@@ -308,14 +305,14 @@ export default function BillsPage() {
               : "Mark bills as paid to build your payment history."}
           </p>
           {activeTab === "pending" && (
-            <Button size="sm" onClick={handleOpenAdd}>
-              <Plus className="w-4 h-4 mr-1.5" />
+            <Button size="sm" onClick={handleOpenAdd} className="h-8 text-xs">
+              <Plus className="w-3.5 h-3.5 mr-1" />
               Add First Bill
             </Button>
           )}
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {displayedBills.map((bill) => {
             const isOverdue = bill.status === "overdue";
             const isPaid = bill.status === "paid";
@@ -323,36 +320,33 @@ export default function BillsPage() {
             return (
               <Card
                 key={bill.id}
-                className={`shadow-sm hover:shadow-md transition-all ${
+                className={`shadow-none ${
                   isOverdue
-                    ? "border-rose-500/50 bg-rose-500/5"
+                    ? "border-destructive/40 bg-destructive/5"
                     : isPaid
-                    ? "opacity-75 bg-card"
+                    ? "opacity-60 bg-muted/20"
                     : "bg-card"
                 }`}
               >
-                <CardHeader className="flex flex-row items-start justify-between pb-2">
+                <CardHeader className="flex flex-row items-start justify-between pb-1.5 p-4 sm:p-5">
                   <div>
-                    <CardTitle className="text-base flex items-center gap-2">
+                    <CardTitle className="text-sm sm:text-base font-serif font-bold flex items-center gap-1.5 text-foreground">
                       {bill.name}
                       {isOverdue ? (
-                        <Badge variant="destructive" className="text-[10px] gap-1">
-                          <AlertCircle className="w-3 h-3" />
+                        <Badge variant="destructive" className="text-[9px]">
                           Overdue
                         </Badge>
                       ) : isPaid ? (
-                        <Badge variant="success" className="text-[10px] gap-1">
-                          <CheckCircle2 className="w-3 h-3" />
+                        <Badge variant="success" className="text-[9px]">
                           Paid
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="text-[10px] gap-1">
-                          <Clock className="w-3 h-3" />
+                        <Badge variant="outline" className="text-[9px]">
                           Due Soon
                         </Badge>
                       )}
                     </CardTitle>
-                    <CardDescription className="text-xs mt-0.5">
+                    <CardDescription className="text-[11px] mt-0.5">
                       {bill.categoryName || "General Expense"}
                       {bill.isRecurring ? ` • ${bill.recurringFrequency}` : ""}
                     </CardDescription>
@@ -362,49 +356,59 @@ export default function BillsPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground"
+                      className="h-7 w-7 text-muted-foreground"
                       onClick={() => handleOpenEdit(bill)}
                       aria-label="Edit bill"
                     >
-                      <Pencil className="w-3.5 h-3.5" />
+                      <Pencil className="w-3 h-3" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                      className="h-7 w-7 text-muted-foreground hover:text-destructive"
                       onClick={() => handleDeleteBill(bill.id)}
                       aria-label="Delete bill"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-3 h-3" />
                     </Button>
                   </div>
                 </CardHeader>
 
-                <CardContent className="space-y-3 pt-2">
-                  <div className="text-xl font-bold font-mono text-rose-600 dark:text-rose-400">
-                    {formatMinorUnits(bill.amountMinor, { currency: bill.currency })}
-                  </div>
+                <CardContent className="space-y-3 p-4 sm:p-5 pt-0">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
+                        Amount Due
+                      </span>
+                      <span className="text-lg sm:text-xl font-bold font-mono text-foreground">
+                        {formatMinorUnits(bill.amountMinor, { currency: bill.currency })}
+                      </span>
+                    </div>
 
-                  <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border/60 pt-2.5">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-primary" />
-                      {isPaid && bill.paidAt
-                        ? `Paid on ${formatDate(bill.paidAt)}`
-                        : `Due: ${formatDate(bill.dueDate)}`}
-                    </span>
-
-                    {!isPaid && (
-                      <Button
-                        size="sm"
-                        variant="default"
-                        className="h-7 text-xs gap-1 font-semibold"
-                        onClick={() => handleOpenPay(bill)}
+                    <div className="text-right">
+                      <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
+                        Due Date
+                      </span>
+                      <span
+                        className={`text-xs font-mono font-medium ${
+                          isOverdue ? "text-rose-800 dark:text-rose-400 font-bold" : "text-foreground"
+                        }`}
                       >
-                        <Check className="w-3.5 h-3.5" />
-                        Mark Paid
-                      </Button>
-                    )}
+                        {formatDate(bill.dueDate)}
+                      </span>
+                    </div>
                   </div>
+
+                  {!isPaid && (
+                    <Button
+                      size="sm"
+                      className="w-full h-8 text-xs font-semibold gap-1.5"
+                      onClick={() => handleOpenPay(bill)}
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      Mark as Paid &amp; Record
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             );

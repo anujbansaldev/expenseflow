@@ -172,57 +172,57 @@ export default function BudgetsPage() {
   const totalSpentMinor = budgets.reduce((sum, b) => sum + b.spentMinor, 0);
 
   return (
-    <div className="space-y-8">
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="space-y-6 sm:space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/80 pb-5">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Budgets &amp; Spending Limits</h2>
-          <p className="text-sm text-muted-foreground">
-            Set monthly category spending caps, warning thresholds, and prevent overspending.
+          <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-foreground">Monthly Envelopes &amp; Budgets</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 font-normal">
+            Category spending allowances, warning thresholds, and proactive overspending prevention.
           </p>
         </div>
-        <Button size="sm" onClick={handleOpenAdd} className="gap-1.5 font-semibold">
-          <Plus className="w-4 h-4" />
-          Create Budget
+        <Button size="sm" onClick={handleOpenAdd} className="h-8 gap-1.5 text-xs font-semibold">
+          <Plus className="w-3.5 h-3.5" />
+          Create Envelope
         </Button>
       </div>
 
       {/* Aggregate Overview KPI */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="glass-panel">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Total Monthly Budget
+        <Card className="shadow-none">
+          <CardHeader className="pb-1.5 p-4 sm:p-5">
+            <CardTitle className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Total Budgeted Allowance
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-extrabold font-mono">
+          <CardContent className="p-4 sm:p-5 pt-0">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-foreground">
               {formatMinorUnits(totalBudgetedMinor, { currency: "INR" })}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="glass-panel">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Total Spent This Month
+        <Card className="shadow-none">
+          <CardHeader className="pb-1.5 p-4 sm:p-5">
+            <CardTitle className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Spent This Month
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-extrabold font-mono text-rose-600 dark:text-rose-400">
+          <CardContent className="p-4 sm:p-5 pt-0">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-rose-800 dark:text-rose-400">
               {formatMinorUnits(totalSpentMinor, { currency: "INR" })}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="glass-panel">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <Card className="shadow-none">
+          <CardHeader className="pb-1.5 p-4 sm:p-5">
+            <CardTitle className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
               Remaining Allowance
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400">
+          <CardContent className="p-4 sm:p-5 pt-0">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-emerald-700 dark:text-emerald-400">
               {formatMinorUnits(Math.max(0, totalBudgetedMinor - totalSpentMinor), {
                 currency: "INR",
               })}
@@ -233,62 +233,56 @@ export default function BudgetsPage() {
 
       {/* Budget Cards Grid */}
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <Card key={i} className="p-5 space-y-3">
-              <Skeleton className="h-5 w-32" />
-              <Skeleton className="h-3 w-full" />
-              <Skeleton className="h-4 w-20" />
+            <Card key={i} className="p-4 space-y-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-2 w-full" />
+              <Skeleton className="h-3 w-20" />
             </Card>
           ))}
         </div>
       ) : budgets.length === 0 ? (
-        <Card className="p-12 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
-            <Target className="w-6 h-6" />
-          </div>
-          <h3 className="text-base font-bold">No budgets active</h3>
+        <Card className="p-8 text-center shadow-none">
+          <h3 className="text-sm font-serif font-bold text-foreground">No active budget envelopes</h3>
           <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1 mb-4">
             Set up a monthly category budget to receive proactive alerts when approaching spending limits.
           </p>
-          <Button size="sm" onClick={handleOpenAdd}>
-            <Plus className="w-4 h-4 mr-1.5" />
-            Create First Budget
+          <Button size="sm" onClick={handleOpenAdd} className="h-8 text-xs">
+            <Plus className="w-3.5 h-3.5 mr-1" />
+            Create First Envelope
           </Button>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {budgets.map((b) => {
             const barColor = b.isExceeded
-              ? "bg-rose-500"
+              ? "bg-primary"
               : b.isWarning
-              ? "bg-amber-500"
-              : "bg-emerald-500";
+              ? "bg-amber-600 dark:bg-amber-500"
+              : "bg-emerald-700 dark:bg-emerald-500";
 
             return (
-              <Card key={b.id} className="shadow-sm hover:shadow-md transition-all">
-                <CardHeader className="flex flex-row items-start justify-between pb-2">
+              <Card key={b.id} className="shadow-none">
+                <CardHeader className="flex flex-row items-start justify-between pb-1.5 p-4 sm:p-5">
                   <div>
-                    <CardTitle className="text-base flex items-center gap-2">
+                    <CardTitle className="text-sm sm:text-base font-serif font-bold flex items-center gap-2 text-foreground">
                       {b.name}
                       {b.isExceeded ? (
-                        <Badge variant="destructive" className="text-[10px] gap-1">
-                          <AlertCircle className="w-3 h-3" />
+                        <Badge variant="destructive" className="text-[10px]">
                           Exceeded
                         </Badge>
                       ) : b.isWarning ? (
-                        <Badge variant="warning" className="text-[10px] gap-1">
-                          <AlertTriangle className="w-3 h-3" />
-                          Warning
+                        <Badge variant="warning" className="text-[10px]">
+                          Warning ({b.warningThreshold}%)
                         </Badge>
                       ) : (
-                        <Badge variant="success" className="text-[10px] gap-1">
-                          <CheckCircle2 className="w-3 h-3" />
+                        <Badge variant="success" className="text-[10px]">
                           On Track
                         </Badge>
                       )}
                     </CardTitle>
-                    <CardDescription className="text-xs mt-0.5">
+                    <CardDescription className="text-[11px] mt-0.5">
                       {b.categoryName || "Overall Budget"} • Monthly Cap
                     </CardDescription>
                   </div>
@@ -297,53 +291,53 @@ export default function BudgetsPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground"
+                      className="h-7 w-7 text-muted-foreground"
                       onClick={() => handleOpenEdit(b)}
                       aria-label="Edit budget"
                     >
-                      <Pencil className="w-3.5 h-3.5" />
+                      <Pencil className="w-3 h-3" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                      className="h-7 w-7 text-muted-foreground hover:text-destructive"
                       onClick={() => handleDeleteBudget(b.id)}
                       aria-label="Delete budget"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-3 h-3" />
                     </Button>
                   </div>
                 </CardHeader>
 
-                <CardContent className="space-y-3 pt-2">
+                <CardContent className="space-y-2 p-4 sm:p-5 pt-0">
                   <div className="flex items-baseline justify-between text-xs">
-                    <span className="font-mono font-bold text-sm">
+                    <span className="font-mono font-bold text-xs text-foreground">
                       {formatMinorUnits(b.spentMinor, { currency: b.currency })}
-                      <span className="text-xs text-muted-foreground font-normal">
+                      <span className="text-[11px] text-muted-foreground font-normal">
                         {" "}
                         of {formatMinorUnits(b.limitAmountMinor, { currency: b.currency })}
                       </span>
                     </span>
-                    <span className="font-bold text-xs">{b.progressPercent}%</span>
+                    <span className="font-mono font-bold text-xs text-foreground">{b.progressPercent}%</span>
                   </div>
 
                   {/* Progress Bar */}
-                  <div className="w-full h-2.5 rounded-full bg-muted overflow-hidden">
+                  <div className="w-full h-1.5 rounded bg-muted overflow-hidden">
                     <div
-                      className={`h-full rounded-full transition-all duration-500 ${barColor}`}
+                      className={`h-full rounded transition-all duration-300 ${barColor}`}
                       style={{ width: `${Math.min(100, b.progressPercent)}%` }}
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                  <div className="flex items-center justify-between text-[10px] text-muted-foreground">
                     <span>
                       {b.isExceeded
                         ? `Over by ${formatMinorUnits(b.spentMinor - b.limitAmountMinor, {
                             currency: b.currency,
                           })}`
-                        : `${formatMinorUnits(b.remainingMinor, { currency: b.currency })} left`}
+                        : `${formatMinorUnits(b.remainingMinor, { currency: b.currency })} remaining`}
                     </span>
-                    <span>Alert at {b.warningThreshold}%</span>
+                    <span>Threshold: {b.warningThreshold}%</span>
                   </div>
                 </CardContent>
               </Card>

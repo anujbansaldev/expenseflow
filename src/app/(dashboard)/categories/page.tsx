@@ -47,14 +47,14 @@ const ICON_MAP: Record<string, typeof Tags> = {
 };
 
 const COLOR_PRESETS = [
-  "#6366f1", // Indigo
-  "#10b981", // Emerald
-  "#f43f5e", // Rose
-  "#f59e0b", // Amber
-  "#06b6d4", // Cyan
-  "#8b5cf6", // Purple
-  "#ec4899", // Pink
-  "#64748b", // Slate
+  "#651F24", // Deep Maroon
+  "#C49A45", // Antique Gold
+  "#A64B2A", // Rust
+  "#6B4636", // Warm Brown
+  "#7A292E", // Burgundy
+  "#B86632", // Burnt Orange
+  "#D6B66A", // Soft Gold
+  "#3A2923", // Dark Brown
 ];
 
 export default function CategoriesPage() {
@@ -72,7 +72,7 @@ export default function CategoriesPage() {
   const [name, setName] = React.useState("");
   const [type, setType] = React.useState<"expense" | "income">("expense");
   const [parentId, setParentId] = React.useState<string>("");
-  const [colorToken, setColorToken] = React.useState("#6366f1");
+  const [colorToken, setColorToken] = React.useState("#651F24");
   const [icon, setIcon] = React.useState("Tags");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -99,7 +99,7 @@ export default function CategoriesPage() {
     setName("");
     setType(activeTab);
     setParentId("");
-    setColorToken(activeTab === "expense" ? "#f43f5e" : "#10b981");
+    setColorToken(activeTab === "income" ? "#2D5A3C" : "#651F24");
     setIcon("Tags");
     setIsAddOpen(true);
   };
@@ -109,7 +109,7 @@ export default function CategoriesPage() {
     setName(cat.name);
     setType(cat.type);
     setParentId(cat.parentId || "");
-    setColorToken(cat.colorToken || "#6366f1");
+    setColorToken(cat.colorToken || "#651F24");
     setIcon(cat.icon || "Tags");
     setIsEditOpen(true);
   };
@@ -127,9 +127,9 @@ export default function CategoriesPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name,
+          name: name.trim(),
           type,
-          parentId: parentId || undefined,
+          parentId: parentId ? parentId : undefined,
           colorToken,
           icon,
         }),
@@ -211,37 +211,38 @@ export default function CategoriesPage() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/80 pb-5">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Category Taxonomy</h2>
-          <p className="text-sm text-muted-foreground">
-            Structure and customize income and expense classifications for budgeting and reports.
+          <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-foreground">Category Taxonomy</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 font-normal">
+            Classifications and tags for transaction reporting and envelope spending limits.
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <Button
             variant={showArchived ? "secondary" : "outline"}
             size="sm"
+            className="h-8 text-xs font-medium"
             onClick={() => setShowArchived(!showArchived)}
           >
             {showArchived ? "Hide Archived" : "Show Archived"}
           </Button>
-          <Button size="sm" onClick={handleOpenAdd} className="gap-1.5 font-semibold">
-            <Plus className="w-4 h-4" />
+          <Button size="sm" onClick={handleOpenAdd} className="h-8 gap-1.5 text-xs font-semibold">
+            <Plus className="w-3.5 h-3.5" />
             Add Category
           </Button>
         </div>
       </div>
 
       {/* Type Tabs */}
-      <div className="flex items-center gap-2 border-b border-border pb-3">
+      <div className="flex items-center gap-2 border-b border-border/80 pb-3">
         <button
           onClick={() => setActiveTab("expense")}
-          className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+          className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
             activeTab === "expense"
-              ? "bg-rose-500/10 text-rose-600 dark:text-rose-400 shadow-sm"
+              ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
@@ -249,9 +250,9 @@ export default function CategoriesPage() {
         </button>
         <button
           onClick={() => setActiveTab("income")}
-          className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+          className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
             activeTab === "income"
-              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shadow-sm"
+              ? "bg-emerald-700 text-white dark:bg-emerald-600"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
@@ -264,22 +265,19 @@ export default function CategoriesPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <Card key={i} className="p-4 space-y-2">
-              <Skeleton className="h-5 w-28" />
-              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-3 w-full" />
             </Card>
           ))}
         </div>
       ) : filteredCategories.length === 0 ? (
-        <Card className="p-12 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
-            <Tags className="w-6 h-6" />
-          </div>
-          <h3 className="text-base font-bold">No {activeTab} categories found</h3>
+        <Card className="p-8 text-center shadow-none">
+          <h3 className="text-sm font-serif font-bold text-foreground">No {activeTab} categories found</h3>
           <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1 mb-4">
             Add categories to classify your transactions and set category-based budgets.
           </p>
-          <Button size="sm" onClick={handleOpenAdd}>
-            <Plus className="w-4 h-4 mr-1.5" />
+          <Button size="sm" onClick={handleOpenAdd} className="h-8 text-xs">
+            <Plus className="w-3.5 h-3.5 mr-1" />
             Add {activeTab} Category
           </Button>
         </Card>
@@ -292,31 +290,31 @@ export default function CategoriesPage() {
             return (
               <Card
                 key={cat.id}
-                className={`shadow-sm hover:shadow-md transition-all ${
-                  cat.isArchived ? "opacity-60 bg-muted/30" : "bg-card"
+                className={`shadow-none ${
+                  cat.isArchived ? "opacity-50 bg-muted/30" : "bg-card"
                 }`}
               >
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                <CardContent className="p-3.5 sm:p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-sm shrink-0"
-                      style={{ backgroundColor: cat.colorToken || (cat.type === "income" ? "#10b981" : "#f43f5e") }}
+                      className="w-7 h-7 rounded flex items-center justify-center text-white shrink-0"
+                      style={{ backgroundColor: cat.colorToken || (cat.type === "income" ? "#2D5A3C" : "#651F24") }}
                     >
-                      <Icon className="w-5 h-5" />
+                      <Icon className="w-3.5 h-3.5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold flex items-center gap-1.5">
+                      <h4 className="text-xs sm:text-sm font-serif font-bold flex items-center gap-1.5 text-foreground">
                         {cat.name}
-                        {cat.isArchived && <Badge variant="outline" className="text-[10px]">Archived</Badge>}
+                        {cat.isArchived && <Badge variant="outline" className="text-[9px]">Archived</Badge>}
                       </h4>
                       {parent ? (
-                        <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                        <p className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
                           <FolderTree className="w-3 h-3" />
                           <span>{parent.name}</span>
                         </p>
                       ) : (
                         <span className="text-[10px] text-muted-foreground uppercase font-semibold">
-                          Root Category
+                          Root
                         </span>
                       )}
                     </div>
@@ -326,24 +324,24 @@ export default function CategoriesPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground"
+                      className="h-7 w-7 text-muted-foreground"
                       onClick={() => handleOpenEdit(cat)}
                       aria-label="Edit category"
                     >
-                      <Pencil className="w-3.5 h-3.5" />
+                      <Pencil className="w-3 h-3" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground"
+                      className="h-7 w-7 text-muted-foreground"
                       onClick={() => handleToggleArchive(cat)}
                       title={cat.isArchived ? "Restore" : "Archive"}
                       aria-label={cat.isArchived ? "Restore category" : "Archive category"}
                     >
                       {cat.isArchived ? (
-                        <RotateCcw className="w-3.5 h-3.5 text-emerald-500" />
+                        <RotateCcw className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                       ) : (
-                        <Archive className="w-3.5 h-3.5" />
+                        <Archive className="w-3 h-3" />
                       )}
                     </Button>
                   </div>

@@ -368,64 +368,64 @@ export default function TransactionsPage() {
   const filteredCategoriesForForm = categories.filter((c) => c.type === type && !c.isArchived);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Top Header & Quick Action */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/80 pb-5">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Transaction Ledger</h2>
-          <p className="text-sm text-muted-foreground">
-            Complete record of your income, expenses, and atomic account transfers.
+          <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-foreground">Transaction Ledger</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 font-normal">
+            Complete journal of income credits, expense debits, and atomic account transfers.
           </p>
         </div>
-        <Button size="sm" onClick={handleOpenAdd} className="gap-1.5 font-semibold shadow-md shadow-primary/20">
-          <Plus className="w-4 h-4" />
-          New Transaction
+        <Button size="sm" onClick={handleOpenAdd} className="h-8 gap-1.5 text-xs font-semibold">
+          <Plus className="w-3.5 h-3.5" />
+          Add Entry
         </Button>
       </div>
 
       {/* Cash Flow Summary KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="glass-panel">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Total Income
+        <Card className="shadow-none">
+          <CardHeader className="flex flex-row items-center justify-between pb-1.5 p-4 sm:p-5">
+            <CardTitle className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Total Inflow
             </CardTitle>
-            <ArrowUpRight className="w-4 h-4 text-emerald-500" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">
+          <CardContent className="p-4 sm:p-5 pt-0">
+            <div className="text-xl sm:text-2xl font-bold font-mono tracking-tight text-emerald-700 dark:text-emerald-400">
               {formatMinorUnits(summary.incomeMinor, { currency: "INR", showSign: true })}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="glass-panel">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Total Expenses
+        <Card className="shadow-none">
+          <CardHeader className="flex flex-row items-center justify-between pb-1.5 p-4 sm:p-5">
+            <CardTitle className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Total Outflow
             </CardTitle>
-            <ArrowDownRight className="w-4 h-4 text-rose-500" />
+            <ArrowDownRight className="w-3.5 h-3.5 text-rose-800 dark:text-rose-400" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-extrabold text-rose-600 dark:text-rose-400">
+          <CardContent className="p-4 sm:p-5 pt-0">
+            <div className="text-xl sm:text-2xl font-bold font-mono tracking-tight text-rose-800 dark:text-rose-400">
               {formatMinorUnits(-summary.expenseMinor, { currency: "INR" })}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="glass-panel">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Net Cash Flow
+        <Card className="shadow-none">
+          <CardHeader className="flex flex-row items-center justify-between pb-1.5 p-4 sm:p-5">
+            <CardTitle className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Net Flow Delta
             </CardTitle>
-            <TrendingUp className="w-4 h-4 text-indigo-500" />
+            <TrendingUp className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-5 pt-0">
             <div
-              className={`text-2xl font-extrabold ${
+              className={`text-xl sm:text-2xl font-bold font-mono tracking-tight ${
                 summary.netFlowMinor >= 0
-                  ? "text-indigo-600 dark:text-indigo-400"
-                  : "text-rose-600 dark:text-rose-400"
+                  ? "text-amber-800 dark:text-amber-300"
+                  : "text-rose-800 dark:text-rose-400"
               }`}
             >
               {formatMinorUnits(summary.netFlowMinor, { currency: "INR", showSign: true })}
@@ -435,7 +435,7 @@ export default function TransactionsPage() {
       </div>
 
       {/* Filter & Search Bar */}
-      <Card className="p-4 bg-card/60">
+      <Card className="p-3.5 bg-card shadow-none">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Search */}
           <div className="relative">

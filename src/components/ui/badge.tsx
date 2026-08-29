@@ -2,7 +2,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "secondary" | "outline" | "success" | "destructive" | "warning";
+  variant?: "default" | "secondary" | "outline" | "success" | "destructive" | "warning" | "gold";
 }
 
 export function Badge({
@@ -12,17 +12,18 @@ export function Badge({
 }: BadgeProps) {
   const variantStyles = {
     default: "bg-primary/10 text-primary border-primary/20",
-    secondary: "bg-secondary text-secondary-foreground border-transparent",
-    outline: "text-foreground border-border",
-    success: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-    destructive: "bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/20",
-    warning: "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20",
+    secondary: "bg-secondary text-secondary-foreground border-border/50",
+    outline: "text-foreground border-border bg-card/60",
+    success: "bg-success/15 text-success dark:text-emerald-400 border-success/30",
+    destructive: "bg-destructive/15 text-destructive dark:text-rose-400 border-destructive/30",
+    warning: "bg-warning/15 text-warning dark:text-amber-400 border-warning/30",
+    gold: "bg-amber-500/10 text-amber-800 dark:text-amber-300 border-amber-500/30",
   };
 
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+        "inline-flex items-center rounded px-2 py-0.5 text-[11px] font-semibold transition-colors border",
         variantStyles[variant],
         className
       )}

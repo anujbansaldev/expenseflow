@@ -55,16 +55,19 @@ function LoginForm() {
   };
 
   return (
-    <Card className="w-full shadow-xl border-border/80 glass-panel">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold tracking-tight">Sign In</CardTitle>
-        <CardDescription>
-          Enter your credentials to securely access your personal expense ledger.
+    <Card className="w-full shadow-none border-border bg-card">
+      <CardHeader className="space-y-1 pb-4">
+        <div className="w-7 h-7 rounded bg-primary text-primary-foreground font-serif font-bold text-xs flex items-center justify-center mb-2 border border-amber-500/30">
+          EF
+        </div>
+        <CardTitle className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-foreground">Sign In to Ledger</CardTitle>
+        <CardDescription className="text-xs">
+          Access your personal financial ledger and multi-account records.
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <CardContent className="space-y-4">
-          <div className="space-y-1.5">
+        <CardContent className="space-y-3.5 pt-0">
+          <div className="space-y-1">
             <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
               <Mail className="w-3.5 h-3.5" />
               Email Address
@@ -84,7 +87,7 @@ function LoginForm() {
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-1">
             <div className="flex items-center justify-between">
               <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5" />
@@ -92,7 +95,7 @@ function LoginForm() {
               </label>
               <Link
                 href="/forgot-password"
-                className="text-xs text-primary hover:underline font-medium"
+                className="text-[11px] text-primary hover:underline font-medium"
               >
                 Forgot password?
               </Link>
@@ -108,21 +111,20 @@ function LoginForm() {
 
           <Button
             type="submit"
-            className="w-full font-semibold gap-2 shadow-md shadow-primary/20 mt-2"
-            size="lg"
+            className="w-full font-semibold gap-2 text-xs h-10 mt-1"
             isLoading={isLoading}
           >
             <span>Sign In</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-3.5 h-3.5" />
           </Button>
 
-          <div className="relative my-2">
+          <div className="relative my-2.5">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border/60" />
+              <span className="w-full border-t border-border/80" />
             </div>
             <div className="relative flex justify-center text-[10px] uppercase">
               <span className="bg-card px-2 text-muted-foreground font-semibold">
-                Instant Demo Access
+                Instant Access
               </span>
             </div>
           </div>
@@ -130,17 +132,17 @@ function LoginForm() {
           <Button
             type="button"
             variant="outline"
-            className="w-full border-primary/40 hover:bg-primary/10 text-primary font-semibold text-xs h-10 gap-1.5"
+            className="w-full border-border hover:bg-muted text-foreground font-semibold text-xs h-9 gap-1.5"
             onClick={async () => {
               await onSubmit({ email: "demo@expenseflow.app", password: "Password123!" });
             }}
           >
-            ⚡ Sign In as Demo User (Pre-seeded Data)
+            Sign In as Demo User (Pre-seeded Data)
           </Button>
         </CardContent>
       </form>
-      <CardFooter className="flex flex-col items-center gap-2 border-t border-border pt-4">
-        <p className="text-xs text-muted-foreground">
+      <CardFooter className="flex flex-col items-center gap-1.5 border-t border-border/80 pt-3.5">
+        <p className="text-[11px] text-muted-foreground">
           Demo: <code className="font-mono text-primary font-bold">demo@expenseflow.app</code> / <code className="font-mono text-primary font-bold">Password123!</code>
         </p>
         <p className="text-xs text-muted-foreground">
@@ -158,7 +160,7 @@ export default function LoginPage() {
   return (
     <React.Suspense
       fallback={
-        <Card className="w-full shadow-xl border-border/80 glass-panel p-6 space-y-4">
+        <Card className="w-full border-border bg-card p-6 space-y-4 shadow-none">
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-10 w-full" />

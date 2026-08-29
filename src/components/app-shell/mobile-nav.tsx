@@ -15,15 +15,15 @@ export function MobileNav() {
   const pathname = usePathname();
 
   const mobileNavItems = [
-    { name: "Home", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Activity", href: "/transactions", icon: Receipt },
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Ledger", href: "/transactions", icon: Receipt },
     { name: "Add", href: "/transactions?action=new", icon: Plus, isAction: true },
     { name: "Analytics", href: "/analytics", icon: BarChart3 },
     { name: "Settings", href: "/settings", icon: Settings },
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-lg border-t border-border px-4 py-2">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-xs border-t border-border px-3 py-1.5">
       <div className="flex items-center justify-around">
         {mobileNavItems.map((item) => {
           const isActive = pathname === item.href;
@@ -34,10 +34,10 @@ export function MobileNav() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="flex items-center justify-center -mt-6 w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 active:scale-95 transition-transform"
+                className="flex items-center justify-center -mt-5 w-10 h-10 rounded bg-primary text-primary-foreground shadow-sm active:scale-95 transition-transform border border-amber-500/30"
                 aria-label="Add transaction"
               >
-                <Plus className="w-6 h-6" />
+                <Plus className="w-5 h-5" />
               </Link>
             );
           }
@@ -47,11 +47,11 @@ export function MobileNav() {
               key={item.name}
               href={item.href}
               className={cn(
-                "flex flex-col items-center gap-1 py-1 px-3 rounded-lg text-xs font-medium transition-colors",
-                isActive ? "text-primary font-semibold" : "text-muted-foreground hover:text-foreground"
+                "flex flex-col items-center gap-0.5 py-1 px-2.5 rounded text-[11px] font-medium transition-colors",
+                isActive ? "text-primary font-bold" : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-4 h-4" />
               <span>{item.name}</span>
             </Link>
           );

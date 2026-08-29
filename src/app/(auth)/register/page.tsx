@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { User, Mail, Lock, Sparkles, ArrowRight } from "lucide-react";
+import { User, Mail, Lock, ArrowRight } from "lucide-react";
 
 interface RegisterFormData {
   name: string;
@@ -53,26 +53,25 @@ export default function RegisterPage() {
   };
 
   return (
-    <Card className="w-full shadow-xl border-border/80 glass-panel">
-      <CardHeader className="space-y-1">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-semibold w-fit mb-1">
-          <Sparkles className="w-3 h-3" />
-          <span>Auto-Seeded Onboarding</span>
+    <Card className="w-full shadow-none border-border bg-card">
+      <CardHeader className="space-y-1 pb-4">
+        <div className="w-7 h-7 rounded bg-primary text-primary-foreground font-serif font-bold text-xs flex items-center justify-center mb-2 border border-amber-500/30">
+          EF
         </div>
-        <CardTitle className="text-2xl font-bold tracking-tight">Create Account</CardTitle>
-        <CardDescription>
-          Get started with ExpenseFlow. We will set up your base currency, initial accounts, and category templates.
+        <CardTitle className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-foreground">Create Ledger Account</CardTitle>
+        <CardDescription className="text-xs">
+          Initialize your base currency, default ledger accounts, and category templates.
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <CardContent className="space-y-4">
-          <div className="space-y-1.5">
+        <CardContent className="space-y-3.5 pt-0">
+          <div className="space-y-1">
             <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
               <User className="w-3.5 h-3.5" />
               Full Name
             </label>
             <Input
-              placeholder="Alex Johnson"
+              placeholder="Anuj Bansal"
               disabled={isLoading}
               error={errors.name?.message}
               {...register("name", {
@@ -82,7 +81,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-1">
             <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
               <Mail className="w-3.5 h-3.5" />
               Email Address
@@ -102,7 +101,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-1">
             <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5" />
               Password
@@ -124,16 +123,15 @@ export default function RegisterPage() {
 
           <Button
             type="submit"
-            className="w-full font-semibold gap-2 shadow-md shadow-primary/20 mt-2"
-            size="lg"
+            className="w-full font-semibold gap-2 text-xs h-10 mt-1"
             isLoading={isLoading}
           >
             <span>Create Free Account</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-3.5 h-3.5" />
           </Button>
         </CardContent>
       </form>
-      <CardFooter className="flex justify-center border-t border-border pt-4">
+      <CardFooter className="flex justify-center border-t border-border/80 pt-3.5">
         <p className="text-xs text-muted-foreground">
           Already have an account?{" "}
           <Link href="/login" className="text-primary font-semibold hover:underline">

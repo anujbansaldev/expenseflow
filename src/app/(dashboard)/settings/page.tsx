@@ -159,84 +159,84 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Settings &amp; Security</h2>
-        <p className="text-sm text-muted-foreground">
+      <div className="border-b border-border/80 pb-5">
+        <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-foreground">Settings &amp; Security Protocol</h2>
+        <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 font-normal">
           Manage your account credentials, base display preferences, and security audit log.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-border pb-3">
+      <div className="flex items-center gap-2 border-b border-border/80 pb-3">
         <button
           onClick={() => setActiveTab("profile")}
-          className={`flex items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
             activeTab === "profile"
-              ? "bg-primary text-primary-foreground shadow-sm"
+              ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <User className="w-4 h-4" />
-          Profile &amp; Preferences
+          <User className="w-3.5 h-3.5" />
+          Profile &amp; Display
         </button>
         <button
           onClick={() => setActiveTab("security")}
-          className={`flex items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
             activeTab === "security"
-              ? "bg-primary text-primary-foreground shadow-sm"
+              ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Shield className="w-4 h-4" />
+          <Shield className="w-3.5 h-3.5" />
           Security &amp; Password
         </button>
         <button
           onClick={() => setActiveTab("audit")}
-          className={`flex items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-lg transition-all ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
             activeTab === "audit"
-              ? "bg-primary text-primary-foreground shadow-sm"
+              ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <History className="w-4 h-4" />
-          Security Audit Trail
+          <History className="w-3.5 h-3.5" />
+          Audit Trail
         </button>
       </div>
 
       {/* Tab 1: Profile & Preferences */}
       {activeTab === "profile" && (
-        <Card className="max-w-2xl shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-base">Personal &amp; Financial Preferences</CardTitle>
-            <CardDescription>
+        <Card className="max-w-2xl shadow-none">
+          <CardHeader className="p-4 sm:p-5 pb-3">
+            <CardTitle className="text-sm sm:text-base font-serif font-bold text-foreground">Personal &amp; Financial Preferences</CardTitle>
+            <CardDescription className="text-xs">
               Customize how dates, money, and timezones appear across all dashboards and reports.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-5 pt-0">
             {isLoading ? (
-              <div className="space-y-4">
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
+              <div className="space-y-3">
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
               </div>
             ) : (
-              <form onSubmit={handleSaveProfile} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-muted-foreground">Full Name</label>
-                  <Input value={name} onChange={(e) => setName(e.target.value)} required />
+              <form onSubmit={handleSaveProfile} className="space-y-3.5">
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-muted-foreground">Full Name</label>
+                  <Input value={name} onChange={(e) => setName(e.target.value)} required className="h-8 text-xs" />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-muted-foreground">Email Address</label>
-                  <Input value={email} disabled className="bg-muted/40 text-muted-foreground" />
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-muted-foreground">Email Address</label>
+                  <Input value={email} disabled className="h-8 text-xs bg-muted/40 text-muted-foreground font-mono" />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-muted-foreground">Base Currency</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-semibold text-muted-foreground">Base Currency</label>
                     <select
-                      className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex h-8 w-full rounded border border-input bg-background px-2.5 py-1 text-xs focus-visible:ring-1 focus-visible:ring-ring"
                       value={currency}
                       onChange={(e) => setCurrency(e.target.value)}
                     >
@@ -247,10 +247,10 @@ export default function SettingsPage() {
                     </select>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-muted-foreground">Timezone</label>
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-semibold text-muted-foreground">Timezone</label>
                     <select
-                      className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex h-8 w-full rounded border border-input bg-background px-2.5 py-1 text-xs focus-visible:ring-1 focus-visible:ring-ring"
                       value={timezone}
                       onChange={(e) => setTimezone(e.target.value)}
                     >
@@ -262,11 +262,11 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-muted-foreground">Date Format</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-semibold text-muted-foreground">Date Format</label>
                     <select
-                      className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex h-8 w-full rounded border border-input bg-background px-2.5 py-1 text-xs focus-visible:ring-1 focus-visible:ring-ring"
                       value={dateFormat}
                       onChange={(e) => setDateFormat(e.target.value)}
                     >
@@ -276,10 +276,10 @@ export default function SettingsPage() {
                     </select>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-muted-foreground">App Theme</label>
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-semibold text-muted-foreground">App Theme</label>
                     <select
-                      className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex h-8 w-full rounded border border-input bg-background px-2.5 py-1 text-xs focus-visible:ring-1 focus-visible:ring-ring"
                       value={theme}
                       onChange={(e) => setTheme(e.target.value)}
                     >
@@ -290,8 +290,8 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-border flex justify-end">
-                  <Button type="submit" isLoading={isSavingProfile}>
+                <div className="pt-3 border-t border-border/80 flex justify-end">
+                  <Button type="submit" size="sm" className="h-8 text-xs font-semibold" isLoading={isSavingProfile}>
                     Save Preferences
                   </Button>
                 </div>
@@ -303,20 +303,20 @@ export default function SettingsPage() {
 
       {/* Tab 2: Security & Password */}
       {activeTab === "security" && (
-        <Card className="max-w-2xl shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
-              <Lock className="w-4 h-4 text-primary" />
+        <Card className="max-w-2xl shadow-none">
+          <CardHeader className="p-4 sm:p-5 pb-3">
+            <CardTitle className="text-sm sm:text-base font-serif font-bold flex items-center gap-2 text-foreground">
+              <Lock className="w-3.5 h-3.5 text-primary" />
               Change Account Password
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-xs">
               Ensure your account uses an adaptive, high-entropy password to protect your financial ledger.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleChangePassword} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground">
+          <CardContent className="p-4 sm:p-5 pt-0">
+            <form onSubmit={handleChangePassword} className="space-y-3.5">
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-muted-foreground">
                   Current Password
                 </label>
                 <Input
@@ -324,11 +324,12 @@ export default function SettingsPage() {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   required
+                  className="h-8 text-xs"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground">
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-muted-foreground">
                   New Password (min. 8 chars)
                 </label>
                 <Input
@@ -336,11 +337,12 @@ export default function SettingsPage() {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
+                  className="h-8 text-xs"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground">
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-muted-foreground">
                   Confirm New Password
                 </label>
                 <Input
@@ -348,11 +350,12 @@ export default function SettingsPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
+                  className="h-8 text-xs"
                 />
               </div>
 
-              <div className="pt-3 border-t border-border flex justify-end">
-                <Button type="submit" isLoading={isChangingPassword}>
+              <div className="pt-3 border-t border-border/80 flex justify-end">
+                <Button type="submit" size="sm" className="h-8 text-xs font-semibold" isLoading={isChangingPassword}>
                   Update Password
                 </Button>
               </div>
@@ -363,47 +366,47 @@ export default function SettingsPage() {
 
       {/* Tab 3: Security Audit Trail */}
       {activeTab === "audit" && (
-        <Card className="max-w-3xl shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
-              <History className="w-4 h-4 text-primary" />
+        <Card className="max-w-3xl shadow-none">
+          <CardHeader className="p-4 sm:p-5 pb-3">
+            <CardTitle className="text-sm sm:text-base font-serif font-bold flex items-center gap-2 text-foreground">
+              <History className="w-3.5 h-3.5 text-primary" />
               Security &amp; Mutation History
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-xs">
               Audit log of authentication events, preferences updates, and financial exports.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-5 pt-0">
             {isLoadingLogs ? (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {[1, 2, 3].map((i) => (
-                  <Skeleton key={i} className="h-12 w-full" />
+                  <Skeleton key={i} className="h-10 w-full" />
                 ))}
               </div>
             ) : logs.length === 0 ? (
-              <p className="text-xs text-muted-foreground text-center py-8">
+              <p className="text-xs text-muted-foreground text-center py-6">
                 No recent security activity logged.
               </p>
             ) : (
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {logs.map((log) => (
                   <div
                     key={log.id}
-                    className="p-3 rounded-xl border border-border/60 bg-muted/20 flex items-center justify-between text-xs"
+                    className="p-2.5 rounded border border-border/80 bg-muted/20 flex items-center justify-between text-xs"
                   >
                     <div className="space-y-0.5">
-                      <p className="font-bold flex items-center gap-1.5">
-                        <Badge variant="secondary" className="text-[10px]">
+                      <p className="font-bold flex items-center gap-1.5 text-foreground">
+                        <Badge variant="outline" className="text-[9px] font-mono">
                           {log.action}
                         </Badge>
                       </p>
                       {log.ipAddress && (
-                        <p className="text-[11px] text-muted-foreground font-mono">
+                        <p className="text-[10px] text-muted-foreground font-mono">
                           IP: {log.ipAddress}
                         </p>
                       )}
                     </div>
-                    <span className="text-muted-foreground text-[11px]">
+                    <span className="text-muted-foreground text-[10px] font-mono">
                       {formatDate(log.createdAt, "dd MMM yyyy, HH:mm")}
                     </span>
                   </div>

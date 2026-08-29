@@ -44,36 +44,30 @@ export function Header() {
   const currentNav = navigationItems.find(
     (item) => pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))
   );
-  const pageTitle = currentNav ? currentNav.name : "Overview";
+  const pageTitle = currentNav ? currentNav.name : "Dashboard";
 
   return (
-    <header className="h-16 border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-4 md:px-8">
-      {/* Page Title & Breadcrumb */}
+    <header className="h-14 sm:h-16 border-b border-border bg-card/90 backdrop-blur-xs sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 md:px-8">
+      {/* Editorial Page Title */}
       <div className="flex items-center gap-2">
-        <h1 className="text-xl font-bold tracking-tight text-foreground">{pageTitle}</h1>
+        <h1 className="text-base sm:text-lg font-serif font-bold tracking-tight text-foreground">{pageTitle}</h1>
       </div>
 
-      {/* Right Actions */}
-      <div className="flex items-center gap-3">
+      {/* Right Controls */}
+      <div className="flex items-center gap-2 sm:gap-3">
         {/* Quick Add Action */}
         <Link href="/transactions">
-          <Button size="sm" className="gap-1.5 shadow-sm font-semibold">
-            <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">Add Transaction</span>
+          <Button size="sm" className="h-8 gap-1 text-xs font-semibold">
+            <Plus className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Add Entry</span>
           </Button>
         </Link>
-
-        {/* Notifications placeholder */}
-        <Button variant="ghost" size="icon" className="text-muted-foreground relative" aria-label="Notifications">
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary" />
-        </Button>
 
         {/* Theme Toggle */}
         <Button
           variant="ghost"
           size="icon"
-          className="text-muted-foreground"
+          className="h-8 w-8 text-muted-foreground hover:text-foreground"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           aria-label="Toggle theme"
         >
@@ -82,13 +76,16 @@ export function Header() {
         </Button>
 
         {/* User Pill & Logout */}
-        <div className="flex items-center gap-2 pl-2 border-l border-border">
-          <Link href="/settings" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-medium text-xs">
-              <User className="w-4 h-4" />
+        <div className="flex items-center gap-1.5 pl-2 border-l border-border">
+          <Link
+            href="/settings"
+            className="flex items-center gap-2 px-2 py-1 rounded text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+          >
+            <div className="w-6 h-6 rounded bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold text-[10px]">
+              {userName ? userName.charAt(0).toUpperCase() : <User className="w-3 h-3" />}
             </div>
             {userName && (
-              <span className="hidden lg:inline text-xs font-semibold text-foreground max-w-[120px] truncate">
+              <span className="hidden md:inline text-xs font-medium text-foreground max-w-[100px] truncate">
                 {userName}
               </span>
             )}
@@ -97,13 +94,13 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="text-muted-foreground hover:text-destructive"
+            className="h-8 w-8 text-muted-foreground hover:text-destructive"
             onClick={handleLogout}
             disabled={isLoggingOut}
             title="Log out"
             aria-label="Log out"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-3.5 h-3.5" />
           </Button>
         </div>
       </div>
