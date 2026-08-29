@@ -115,9 +115,34 @@ function LoginForm() {
             <span>Sign In</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
+
+          <div className="relative my-2">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border/60" />
+            </div>
+            <div className="relative flex justify-center text-[10px] uppercase">
+              <span className="bg-card px-2 text-muted-foreground font-semibold">
+                Instant Demo Access
+              </span>
+            </div>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full border-primary/40 hover:bg-primary/10 text-primary font-semibold text-xs h-10 gap-1.5"
+            onClick={async () => {
+              await onSubmit({ email: "demo@expenseflow.app", password: "Password123!" });
+            }}
+          >
+            ⚡ Sign In as Demo User (Pre-seeded Data)
+          </Button>
         </CardContent>
       </form>
-      <CardFooter className="flex justify-center border-t border-border pt-4">
+      <CardFooter className="flex flex-col items-center gap-2 border-t border-border pt-4">
+        <p className="text-xs text-muted-foreground">
+          Demo: <code className="font-mono text-primary font-bold">demo@expenseflow.app</code> / <code className="font-mono text-primary font-bold">Password123!</code>
+        </p>
         <p className="text-xs text-muted-foreground">
           Don&apos;t have an account yet?{" "}
           <Link href="/register" className="text-primary font-semibold hover:underline">
