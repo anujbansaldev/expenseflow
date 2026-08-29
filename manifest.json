@@ -1,0 +1,14 @@
+{
+  "name": "ExpenseFlow Antigravity Build Kit",
+  "primaryStack": [
+    "Next.js App Router",
+    "TypeScript",
+    "MongoDB",
+    "Mongoose",
+    "Tailwind CSS",
+    "Zod",
+    "React Hook Form"
+  ],
+  "workflow": "Run phase prompts sequentially after reading AGENTS.md",
+  "fileCount": 38
+}
