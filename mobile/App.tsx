@@ -1,6 +1,7 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { View, StyleSheet, Platform } from "react-native";
+import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider, useTheme } from "./src/context/ThemeContext";
 import { AuthProvider } from "./src/context/AuthContext";
@@ -19,16 +20,16 @@ function AppContent() {
   const { colors } = useTheme();
 
   return (
-    <>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar style={colors.isDark ? "light" : "dark"} />
       <RootNavigator />
-    </>
+    </View>
   );
 }
 
 export default function App() {
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics} style={styles.container}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <AuthProvider>
@@ -39,3 +40,11 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: Platform.OS === "web" ? ("100vh" as any) : "100%",
+    width: "100%",
+  },
+});

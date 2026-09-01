@@ -1,32 +1,47 @@
 # Dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.js
 .yarn/install-state.gz
 
-# Next.js build output
-/.next/
-/out/
-/build
+# Next.js & Web Build Output
+.next/
+out/
+build/
+dist/
+.turbo/
+.swc/
+
+# Expo & React Native (mobile)
+.expo/
+.expo-shared/
+web-build/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
 
 # Testing & Coverage
-/coverage
-/playwright-report
-/test-results
-blob-report
-playwright/.cache
+coverage/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
 
 # Vite / Vitest cache
-node_modules/.vite
-.vitest
+.vite/
+.vitest/
 
 # Environment & Secret files
 .env
+.env.*
+!.env.example
 .env*.local
 .env.development.local
 .env.test.local
 .env.production.local
-!.env.example
 
 # Certificates and keys
 *.pem
@@ -64,5 +79,12 @@ Thumbs.db
 *.tsbuildinfo
 next-env.d.ts
 
+# Archives & Temporary files
+*.zip
+*.tar.gz
+*.7z
+*.rar
+*.log
+
 # Vercel deployment cache
-.vercel
+.vercel/
