@@ -21,6 +21,11 @@ export const metadata: Metadata = {
   title: "ExpenseFlow — Editorial Financial Management & Ledger Suite",
   description:
     "A refined, private and accurate financial ledger with multi-account tracking, envelope budgeting, and structured cash velocity analytics.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+    shortcut: "/logo.png",
+  },
 };
 
 export default function RootLayout({

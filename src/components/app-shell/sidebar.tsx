@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
@@ -39,9 +40,16 @@ export function Sidebar() {
   return (
     <aside className="hidden md:flex flex-col w-60 border-r border-border bg-card h-screen sticky top-0 shrink-0 select-none">
       {/* Editorial Brand Header */}
-      <div className="h-16 flex items-center gap-3 px-5 border-b border-border/80">
-        <div className="w-8 h-8 rounded bg-primary text-primary-foreground font-serif font-bold text-sm flex items-center justify-center border border-amber-500/30 shrink-0">
-          EF
+      <Link href="/dashboard" className="h-16 flex items-center gap-3 px-5 border-b border-border/80 hover:bg-muted/40 transition-colors">
+        <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0 border border-border shadow-xs">
+          <Image
+            src="/logo.png"
+            alt="ExpenseFlow Logo"
+            fill
+            sizes="32px"
+            className="object-contain"
+            priority
+          />
         </div>
         <div>
           <span className="font-serif font-bold text-base tracking-tight text-foreground block leading-tight">
@@ -51,7 +59,7 @@ export function Sidebar() {
             Financial Ledger
           </span>
         </div>
-      </div>
+      </Link>
 
       {/* Navigation Links */}
       <nav className="flex-1 overflow-y-auto px-2.5 py-4 space-y-0.5">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -23,14 +24,21 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
       {/* Editorial Navigation Header */}
       <header className="border-b border-border bg-card/90 backdrop-blur-xs sticky top-0 z-50 h-16 flex items-center justify-between px-6 lg:px-12 max-w-7xl mx-auto w-full">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-primary text-primary-foreground font-serif font-bold text-sm flex items-center justify-center border border-amber-500/30">
-            EF
+        <Link href="/" className="flex items-center gap-3">
+          <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-border shadow-xs shrink-0">
+            <Image
+              src="/logo.png"
+              alt="ExpenseFlow Logo"
+              fill
+              sizes="32px"
+              className="object-contain"
+              priority
+            />
           </div>
           <span className="font-serif font-bold text-lg tracking-tight text-foreground">
             ExpenseFlow
           </span>
-        </div>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-xs font-medium text-muted-foreground">
           <a href="#product" className="hover:text-foreground transition-colors">Product</a>
@@ -450,12 +458,18 @@ export default function LandingPage() {
       {/* Editorial Publication Footer */}
       <footer className="border-t border-border bg-card py-12 px-6 lg:px-12 mt-auto">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-muted-foreground">
-          <div className="flex items-center gap-3">
-            <div className="w-6 h-6 rounded bg-primary text-primary-foreground font-serif font-bold text-xs flex items-center justify-center">
-              EF
+          <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+            <div className="relative w-6 h-6 rounded overflow-hidden border border-border shrink-0">
+              <Image
+                src="/logo.png"
+                alt="ExpenseFlow Logo"
+                fill
+                sizes="24px"
+                className="object-contain"
+              />
             </div>
             <span className="font-serif font-semibold text-foreground">ExpenseFlow Financial Ledger</span>
-          </div>
+          </Link>
 
           <div className="flex items-center gap-6">
             <Link href="/login" className="hover:text-foreground transition-colors">Sign In</Link>
