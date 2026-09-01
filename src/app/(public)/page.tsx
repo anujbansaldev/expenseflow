@@ -24,20 +24,15 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
       {/* Editorial Navigation Header */}
       <header className="border-b border-border bg-card/90 backdrop-blur-xs sticky top-0 z-50 h-16 flex items-center justify-between px-6 lg:px-12 max-w-7xl mx-auto w-full">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-border shadow-xs shrink-0">
-            <Image
-              src="/logo.png"
-              alt="ExpenseFlow Logo"
-              fill
-              sizes="32px"
-              className="object-contain"
-              priority
-            />
-          </div>
-          <span className="font-serif font-bold text-lg tracking-tight text-foreground">
-            ExpenseFlow
-          </span>
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo.png"
+            alt="ExpenseFlow"
+            width={200}
+            height={50}
+            className="h-10 w-auto object-contain"
+            priority
+          />
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-xs font-medium text-muted-foreground">
@@ -458,17 +453,14 @@ export default function LandingPage() {
       {/* Editorial Publication Footer */}
       <footer className="border-t border-border bg-card py-12 px-6 lg:px-12 mt-auto">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-muted-foreground">
-          <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-            <div className="relative w-6 h-6 rounded overflow-hidden border border-border shrink-0">
-              <Image
-                src="/logo.png"
-                alt="ExpenseFlow Logo"
-                fill
-                sizes="24px"
-                className="object-contain"
-              />
-            </div>
-            <span className="font-serif font-semibold text-foreground">ExpenseFlow Financial Ledger</span>
+          <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+            <Image
+              src="/logo.png"
+              alt="ExpenseFlow"
+              width={160}
+              height={40}
+              className="h-8 w-auto object-contain"
+            />
           </Link>
 
           <div className="flex items-center gap-6">

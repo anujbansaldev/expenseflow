@@ -40,25 +40,15 @@ export function Sidebar() {
   return (
     <aside className="hidden md:flex flex-col w-60 border-r border-border bg-card h-screen sticky top-0 shrink-0 select-none">
       {/* Editorial Brand Header */}
-      <Link href="/dashboard" className="h-16 flex items-center gap-3 px-5 border-b border-border/80 hover:bg-muted/40 transition-colors">
-        <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0 border border-border shadow-xs">
-          <Image
-            src="/logo.png"
-            alt="ExpenseFlow Logo"
-            fill
-            sizes="32px"
-            className="object-contain"
-            priority
-          />
-        </div>
-        <div>
-          <span className="font-serif font-bold text-base tracking-tight text-foreground block leading-tight">
-            ExpenseFlow
-          </span>
-          <span className="block text-[10px] uppercase font-semibold tracking-wider text-muted-foreground">
-            Financial Ledger
-          </span>
-        </div>
+      <Link href="/dashboard" className="h-16 flex items-center px-4 border-b border-border/80 hover:bg-muted/30 transition-colors">
+        <Image
+          src="/logo.png"
+          alt="ExpenseFlow"
+          width={180}
+          height={48}
+          className="h-9 w-auto max-w-[190px] object-contain"
+          priority
+        />
       </Link>
 
       {/* Navigation Links */}
